@@ -350,6 +350,7 @@ export default function ProveedoresPage() {
   });
 
   return (
+    <>
     <div className="page">
       {/* ── Header ── */}
       <div className="pageHeaderRow">
@@ -783,5 +784,6 @@ export default function ProveedoresPage() {
       onConfirm={doDelete}
       onCancel={() => setConfirmDeleteId(null)}
     />
+    </>
   );
 }
