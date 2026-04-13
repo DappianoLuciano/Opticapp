@@ -1,0 +1,333 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../main/prisma-client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Paciente {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  dni         String   @unique
+  direccion   String?
+  telefono    String?
+  email       String?
+  fechaNac    DateTime?
+  obraSocial  String?
+
+  evoluciones EvolucionRefraccion[]
+  recetas     Receta[]
+  turnos      Turno[]
+
+  createdAt   DateTime @default(now())
+}
+
+model Armazon {
+  id          Int      @id @default(autoincrement())
+  marca       String
+  modelo      String
+  codigo      String?  @unique
+  stock       Int      @default(0)
+  costo       Float    @default(0)
+  // ── NUEVO ──────────────────────────────────
+  precioFinal Float?
+  createdAt   DateTime @default(now())
+
+  deletedAt   DateTime?
+  recetas     Receta[]
+}
+
+model Vidrio {
+  id              Int      @id @default(autoincrement())
+  nombre          String
+  descripcion     String?
+  precioCal       Int?
+  precioRanura    Int?
+  precioPerforado Int?
+  // ── NUEVO ──────────────────────────────────
+  precioCalFinal       Int?
+  precioRanuraFinal    Int?
+  precioPerforadoFinal Int?
+  activo          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  recetas         Receta[]
+}
+
+model Receta {
+  id                     Int       @id @default(autoincrement())
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @default(now()) @updatedAt
+
+  pacienteId             Int
+  paciente               Paciente  @relation(fields: [pacienteId], references: [id])
+
+  armazonId              Int
+  armazon                Armazon   @relation(fields: [armazonId], references: [id])
+
+  vidrioId               Int?
+  vidrio                 Vidrio?   @relation(fields: [vidrioId], references: [id])
+
+  distancia              String?
+
+  odEsf                  Float?
+  odCil                  Float?
+  odEje                  Float?
+
+  oiEsf                  Float?
+  oiCil                  Float?
+  oiEje                  Float?
+
+  distancia2             String?
+  od2Esf                 Float?
+  od2Cil                 Float?
+  od2Eje                 Float?
+  oi2Esf                 Float?
+  oi2Cil                 Float?
+  oi2Eje                 Float?
+
+  tratamiento            String?
+  formato                String?
+  dip                    Float?
+
+  fechaReceta            DateTime?
+
+  doctor                 String?
+  patologia              String?
+  obs                    String?
+
+  montaje                String?
+
+  sena                   Int?
+  laboratorio            String?
+
+  precioArmazon          Int?
+  precioVidrio           Int?
+  total                  Int?
+
+  estadoPago             String    @default("PENDIENTE")
+  montoPagado            Int?
+  metodoPago             String?
+
+  entregaFecha           DateTime?
+
+  entregada              Boolean   @default(false)
+  entregadaAt            DateTime?
+
+  avisoRetiroEnviado     Boolean   @default(false)
+  avisoRetiroEnviadoAt   DateTime?
+
+  retirada               Boolean   @default(false)
+  retiradaAt             DateTime?
+
+  deletedAt              DateTime?
+
+  fotos                  FotoReceta[]
+}
+
+model FotoReceta {
+  id            Int      @id @default(autoincrement())
+  recetaId      Int
+  receta        Receta   @relation(fields: [recetaId], references: [id], onDelete: Cascade)
+  foto          String   // base64 JPEG
+  observaciones String   @default("")
+  createdAt     DateTime @default(now())
+}
+
+model EvolucionRefraccion {
+  id          Int      @id @default(autoincrement())
+  pacienteId  Int
+  fecha       DateTime @default(now())
+
+  distancia   String?
+
+  odEsf       Float?
+  odCil       Float?
+  odEje       Int?
+
+  oiEsf       Float?
+  oiCil       Float?
+  oiEje       Int?
+
+  tratamiento String?
+  formato     String?
+  dip         Float?
+
+  createdAt DateTime @default(now())
+  paciente  Paciente @relation(fields: [pacienteId], references: [id])
+  deletedAt DateTime?
+
+  @@index([pacienteId])
+  @@index([fecha])
+}
+
+model ServicioOptica {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  precio      Int
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Configuracion {
+  id                      Int      @id @default(autoincrement())
+  seniaPorcentaje         Float    @default(30)
+  descuentoEfectivo       Float    @default(0)
+  descuentoDebito         Float    @default(0)
+  descuentoTransferencia  Float    @default(0)
+  cuotasCreditoJson       String   @default("[]")
+  updatedAt               DateTime @updatedAt
+  createdAt               DateTime @default(now())
+}
+
+enum TipoProveedor {
+  ARMAZONES
+  VIDRIOS
+}
+
+model Proveedor {
+  id                Int                  @id @default(autoincrement())
+  tipo              TipoProveedor
+  nombre            String
+  telefono          String?
+  email             String?
+  productos         String?
+  contactoPreferido String?
+  formasPago        String?
+  frecuenciaEntrega String?
+  observaciones     String?
+
+  banco             String?
+  cbu               String?
+  alias             String?
+  titular           String?
+
+  movimientos       MovimientoProveedor[]
+
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  @@index([tipo, nombre])
+}
+
+model MovimientoProveedor {
+  id           Int       @id @default(autoincrement())
+  proveedorId  Int
+  proveedor    Proveedor @relation(fields: [proveedorId], references: [id])
+
+  fecha        DateTime  @default(now())
+  concepto     String
+  debe         Int?
+  haber        Int?
+  saldo        Int
+
+  createdAt    DateTime  @default(now())
+
+  @@index([proveedorId, fecha])
+}
+
+model CategoriaGasto {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  color     String?  @default("#7ad8b0")
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  gastos    Gasto[]
+}
+
+model Gasto {
+  id            Int      @id @default(autoincrement())
+  categoriaId   Int?
+  categoria     CategoriaGasto? @relation(fields: [categoriaId], references: [id])
+
+  descripcion   String
+  monto         Int
+  recurrente       Boolean  @default(false)
+  frecuenciaMeses  Int?
+
+  fechaVenc     DateTime?
+
+  pagado        Boolean  @default(false)
+  pagadoAt      DateTime?
+
+  obs           String?
+
+  codigoCliente String?
+  numeroPago    String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([fechaVenc])
+  @@index([categoriaId])
+}
+
+model Cuenta {
+  id           Int              @id @default(autoincrement())
+  nombre       String
+  medioPago    String           // EFECTIVO | TRANSFERENCIA | BILLETERA | TARJETA_BANCO
+  saldoInicial Float            @default(0)
+  activo       Boolean          @default(true)
+  orden        Int              @default(0)
+  movimientos  MovimientoCaja[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+model CajaDiaria {
+  id           Int              @id @default(autoincrement())
+  fecha        String           @unique
+  saldoInicial Float            @default(0)
+  cerrada      Boolean          @default(false)
+  movimientos  MovimientoCaja[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+model MovimientoCaja {
+  id           Int         @id @default(autoincrement())
+  cajaDiariaId Int
+  cajaDiaria   CajaDiaria  @relation(fields: [cajaDiariaId], references: [id])
+  cuentaId     Int?
+  cuenta       Cuenta?     @relation(fields: [cuentaId], references: [id])
+  tipo         String      // VENTA | GASTO | PAGO_PROVEEDOR | AJUSTE
+  concepto     String
+  monto        Float       // positive = ingreso, negative = egreso
+  medioPago    String
+  refId        Int?
+  refTipo      String?     // RECETA | GASTO | PAGO_PROVEEDOR
+  createdAt    DateTime    @default(now())
+}
+
+model DetallePago {
+  id        Int      @id @default(autoincrement())
+  refId     Int
+  refTipo   String   // GASTO | PAGO_PROVEEDOR
+  medioPago String
+  monto     Float
+  createdAt DateTime @default(now())
+}
+
+model Turno {
+  id             Int       @id @default(autoincrement())
+  fecha          DateTime
+  duracion       Int       @default(30)
+  pacienteId     Int?
+  paciente       Paciente? @relation(fields: [pacienteId], references: [id])
+  nombrePaciente String?
+  telefono       String?
+  motivo         String?
+  notas          String?
+  estado         String    @default("pendiente")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([fecha])
+}

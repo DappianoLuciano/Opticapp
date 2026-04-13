@@ -1,0 +1,30 @@
+/* =========================================
+   EVOLUCIONES
+========================================= */
+.evoCard    { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; box-shadow: var(--shadow); }
+.evoHeader  { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.evoTitle   { font-weight: 900; font-size: 16px; }
+.evoAddBtn  { white-space: nowrap; padding: 10px 14px; }
+
+.evoThead, .evoRow { display: grid; grid-template-columns: 0.8fr 0.55fr 0.55fr 1.2fr 0.65fr; gap: 10px; align-items: center; }
+.evoThead { margin-top: 10px; margin-bottom: 8px; }
+
+.evoTh { background: rgba(122,216,176,0.18); padding: 10px 12px; border-radius: 12px; font-weight: 900; color: #0b3a2f; border: 1px solid rgba(85,201,154,0.25); }
+
+.evoRow   { padding: 8px 2px; border-top: 1px solid var(--border); }
+.evoDate  { font-weight: 900; }
+.evoVal   { text-align: center; color: var(--text); font-weight: 900; }
+.evoVal.muted { color: var(--muted); }
+.evoVal.hi    { color: #0b7a55; }
+.evoEmpty { padding: 10px 2px; color: var(--muted); }
+
+.evoActions { display: flex; justify-content: center; align-items: center; gap: 10px; }
+
+.evoTrashBtn { width: 38px; height: 38px; border-radius: 12px; border: 1px solid var(--border); background: rgba(15,23,42,0.04); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.15s ease; }
+.evoTrashBtn img { width: 18px; height: 18px; opacity: 0.75; }
+.evoTrashBtn:hover { background: rgba(255,77,77,0.15); border-color: rgba(255,77,77,0.35); }
+.evoTrashBtn:hover img { opacity: 1; }
+
+/* ── Dark mode ── */
+[data-theme="dark"] .evoTh        { color: var(--text); background: rgba(122,216,176,0.10); border-color: rgba(122,216,176,0.18); }
+[data-theme="dark"] .evoTrashBtn  { background: rgba(255,255,255,0.06); }

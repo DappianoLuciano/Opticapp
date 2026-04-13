@@ -1,0 +1,46 @@
+/* =========================================
+   TABLES — grids de datos, tablas HTML
+========================================= */
+
+/* ── Grid table (armazones, vidrios) ───────────────────────────────────────── */
+.table { margin-top: 10px; border-top: 1px solid var(--border); }
+
+.thead, .trow {
+  display: grid;
+  grid-template-columns: 1fr 0.8fr 1fr;
+  gap: 10px; padding: 10px 0; align-items: center;
+}
+.thead { color: var(--muted); font-size: 13px; font-weight: 900; }
+.trow  { border-top: 1px solid var(--border); }
+
+.table.compact .thead,
+.table.compact .trow { padding: 8px 0; }
+
+.thead2, .trow2 { grid-template-columns: 1.2fr 0.8fr; }
+
+.actions { display: flex; justify-content: center; align-items: center; gap: 12px; width: 100%; min-width: 120px; }
+
+.table .thead > div:last-child,
+.table .trow  > div:last-child  { text-align: center; }
+.table .thead > div:nth-child(6) { min-width: 120px; display: flex; justify-content: center; align-items: center; }
+.table .thead > div:nth-child(5),
+.table .trow  > div:nth-child(5) { display: flex; justify-content: center; align-items: center; text-align: center; }
+
+.activeRow { background: rgba(122,216,176,0.16); border-radius: 12px; padding-left: 10px !important; padding-right: 10px !important; }
+
+/* ── HTML table (proveedores, pagos, ventas) ───────────────────────────────── */
+.provTableWrap { overflow-x: auto; }
+
+.provTable { width: 100%; border-collapse: collapse; min-width: 680px; }
+.provTable th,
+.provTable td { padding: 12px 10px; border-bottom: 1px solid var(--border); text-align: left; font-size: 14px; vertical-align: middle; }
+.provTable th  { color: var(--muted); font-size: 13px; font-weight: 900; }
+.provTable tbody tr:hover { background: rgba(122,216,176,0.06); }
+
+.provSaldoCell          { font-weight: 900; white-space: nowrap; }
+.provSaldoCell.negative { color: #d9363e; }
+.provSaldoCell.positive { color: #0b7a55; }
+.provSaldoCell.neutral  { color: #475569; }
+
+/* ── Acciones en tablas ────────────────────────────────────────────────────── */
+.actions .stepBtn { width: 42px; padding: 0; display: flex; justify-content: center; align-items: center; }

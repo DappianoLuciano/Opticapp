@@ -1,0 +1,18 @@
+/* =========================================
+   PRINT
+========================================= */
+@media print {
+  body * { visibility: hidden !important; }
+
+  #printArea, #printArea * { visibility: visible !important; }
+
+  #printArea {
+    position: fixed !important;
+    inset: 0;
+    padding: 18px;
+    background: #fff !important; color: #000 !important;
+    display: block !important;
+  }
+
+  .noPrint { display: none !important; }
+}

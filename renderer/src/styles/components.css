@@ -1,0 +1,145 @@
+/* =========================================
+   COMPONENTS — botones, modal, toast, badges
+========================================= */
+
+/* ── Botones principales ───────────────────────────────────────────────────── */
+.btn {
+  background: rgba(122,216,176,0.18); border: 1px solid rgba(85,201,154,0.35);
+  color: #0b3a2f; padding: 10px 14px; border-radius: 12px; cursor: pointer; font-weight: 900;
+}
+.btn:hover    { background: rgba(122,216,176,0.28); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn.primary { background: var(--green-2); border-color: var(--green-2); color: #083126; width: 100%; }
+.btn.danger  { background: #e5484d; color: #fff; border: none; }
+.btn.danger:hover { background: #c7373b; }
+
+.btnPrimary { border: 1px solid transparent; background: var(--green-2); color: #fff; border-radius: 12px; padding: 10px 14px; font-weight: 800; cursor: pointer; }
+.btnPrimary:disabled { opacity: .6; cursor: not-allowed; }
+
+.btnGhost { border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 12px; padding: 10px 14px; font-weight: 800; cursor: pointer; }
+.btnGhost:disabled { opacity: .6; cursor: not-allowed; }
+
+.btnSmall { border: 1px solid var(--border); background: var(--card); border-radius: 10px; padding: 9px 12px; cursor: pointer; font-weight: 800; font-size: 13px; text-decoration: none; color: var(--text); transition: 0.15s ease; }
+.btnSmall:hover { background: rgba(122,216,176,0.12); border-color: rgba(85,201,154,0.30); }
+
+.btnDangerSmall { border: 1px solid rgba(255,77,77,0.35); background: rgba(255,77,77,0.10); border-radius: 10px; padding: 9px 12px; cursor: pointer; font-weight: 900; font-size: 13px; color: #b91c1c; transition: 0.15s ease; }
+.btnDangerSmall:hover { background: rgba(255,77,77,0.18); }
+
+.pillBtn { border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 999px; padding: 9px 12px; cursor: pointer; font-weight: 800; font-size: 13px; transition: 0.15s ease; }
+.pillBtn:hover  { border-color: rgba(85,201,154,0.35); background: rgba(122,216,176,0.12); }
+.pillBtn.active { background: var(--green-2); border-color: var(--green-2); color: #fff; }
+
+/* ── Pagination ─────────────────────────────────────────────────────────────── */
+.pagination { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
+.paginationInfo { font-size: 13px; font-weight: 800; opacity: 0.65; min-width: 48px; text-align: center; }
+
+/* ── Icon buttons ──────────────────────────────────────────────────────────── */
+.iconBtn { width: 38px; height: 38px; border-radius: 12px; border: 1px solid var(--border); background: rgba(15,23,42,0.04); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.15s ease; }
+.iconBtn img { width: 18px; height: 18px; opacity: 0.75; }
+.iconBtn:hover { background: rgba(15,23,42,0.08); }
+
+.dangerIcon:hover { background: rgba(255,77,77,0.15); border-color: rgba(255,77,77,0.35); }
+.dangerIcon:hover img { opacity: 1; }
+
+/* ── Multiplicadores de precio (igual que StockPage) ───────────────────────── */
+.multRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.multBtn {
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(85,201,154,0.45);
+  background: rgba(122,216,176,0.14);
+  color: #0b3a2f;
+  font-weight: 900;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.multBtn:hover {
+  background: rgba(85,201,154,0.30);
+  border-color: var(--green-2);
+}
+
+/* ── Webcam (pestaña foto en NuevaReceta) ───────────────────────────────────── */
+.webcamVideo {
+  width: 100%; border-radius: 12px; display: block;
+  background: #000; max-height: 420px; object-fit: cover;
+}
+.capturaPreview {
+  width: 100%; border-radius: 12px; display: block;
+  object-fit: contain; max-height: 420px;
+}
+
+/* ── Modal ─────────────────────────────────────────────────────────────────── */
+.modalOverlay {
+  position: fixed; inset: 0; background: rgba(2,6,23,0.45);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 999999; padding: 18px; backdrop-filter: blur(6px);
+}
+
+.modalCard {
+  width: min(920px, calc(100vw - 36px)); max-width: 920px;
+  max-height: calc(100vh - 36px); overflow: auto;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 18px; padding: 16px; box-shadow: var(--shadow);
+}
+
+.modalHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+.modalTitle  { font-weight: 900; font-size: 16px; color: var(--text); }
+.modalClose  { width: 38px; height: 38px; border-radius: 12px; border: 1px solid var(--border); background: rgba(122,216,176,0.10); color: #0b3a2f; cursor: pointer; font-weight: 900; }
+.modalClose:hover { background: rgba(122,216,176,0.20); }
+.modalActions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
+
+/* Override modal grid */
+.modalCard .grid2       { gap: 14px; }
+.modalCard .card        { padding: 12px !important; }
+.modalCard .form        { gap: 10px; }
+@media (min-width: 980px) { .modalCard .grid2 { grid-template-columns: 1fr 1fr !important; } }
+
+/* ── Toast ─────────────────────────────────────────────────────────────────── */
+.toast {
+  position: fixed; right: 18px; bottom: 18px;
+  background: rgba(255,255,255,0.92); border: 1px solid var(--border); color: var(--text);
+  padding: 10px 12px; border-radius: 12px; z-index: 999999;
+  pointer-events: none; backdrop-filter: blur(8px);
+  font-size: 13px; max-width: 420px; box-shadow: var(--shadow);
+}
+
+/* ── Stock badges ──────────────────────────────────────────────────────────── */
+.stock     { font-weight: 900; }
+.stock.zero{ color: #d21f1f; }
+
+.stockBadge { min-width: 38px; height: 34px; padding: 0 10px; display: flex; align-items: center; justify-content: center; border-radius: 999px; font-weight: 900; font-size: 14px; background: rgba(122,216,176,0.20); border: 1px solid rgba(85,201,154,0.40); color: #0b7a55; }
+.stockLow   { background: rgba(255,183,77,0.18); border: 1px solid rgba(255,183,77,0.45); color: #8a4b00; }
+.stockZero  { background: rgba(255,77,77,0.15); border: 1px solid rgba(255,77,77,0.45); color: #7a0d0d; }
+
+/* ── Saldo colors ──────────────────────────────────────────────────────────── */
+.negative { color: #d9363e; }
+.positive { color: #0b7a55; }
+.neutral  { color: #475569; }
+
+/* ── Pill toggle (tipo proveedor, etc.) ────────────────────────────────────── */
+.provToggleRow { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ── Tabla proveedores ─────────────────────────────────────────────────────── */
+.provTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.provTable th { padding: 10px 12px; text-align: left; font-weight: 900; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.02); }
+.provTable td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.provTable tr:last-child td { border-bottom: none; }
+.provTable tr:hover td { background: rgba(122,216,176,0.06); }
+
+/* ── Dark mode overrides ───────────────────────────────────────────────────── */
+[data-theme="dark"] .btn         { color: var(--text); }
+[data-theme="dark"] .modalClose  { color: var(--text); background: rgba(255,255,255,0.06); }
+[data-theme="dark"] .modalClose:hover { background: rgba(255,255,255,0.12); }
+[data-theme="dark"] .multBtn     { color: var(--text); background: rgba(122,216,176,0.12); }
+[data-theme="dark"] .iconBtn     { background: rgba(255,255,255,0.06); }
+[data-theme="dark"] .iconBtn:hover { background: rgba(255,255,255,0.12); }
+[data-theme="dark"] .stockBadge  { color: #7adfc0; }
+[data-theme="dark"] .provTable tr:hover td { background: rgba(122,216,176,0.08); }
