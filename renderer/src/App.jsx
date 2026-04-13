@@ -99,6 +99,105 @@ const NAV = [
   { section: "Sistema",    key: "config",          label: "Configuración" },
 ];
 
+// ── Modal de actualización ────────────────────────────────────────────────────
+function UpdateModal({ status, info, onDownload, onInstall, onDismiss }) {
+  if (status !== "available" && status !== "downloading" && status !== "downloaded") return null;
+
+  return (
+    <div className="modalOverlay" onClick={status === "available" ? onDismiss : undefined}>
+      <div
+        className="modalCard"
+        style={{ maxWidth: 460 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="modalHeader">
+          <div className="modalTitle">
+            {status === "available"   && "Nueva versión disponible"}
+            {status === "downloading" && "Descargando actualización..."}
+            {status === "downloaded"  && "Actualización lista para instalar"}
+          </div>
+          {status === "available" && (
+            <button className="modalClose" type="button" onClick={onDismiss}>✕</button>
+          )}
+        </div>
+
+        {/* Cuerpo */}
+        <div style={{ margin: "12px 0 24px" }}>
+          {status === "available" && (
+            <>
+              <div style={{ fontSize: 15, fontWeight: 900, marginBottom: 8 }}>
+                OpticApp <span style={{ color: "var(--green-2)" }}>v{info?.version}</span>
+              </div>
+              <p style={{ fontSize: 13, opacity: 0.7, lineHeight: 1.6, margin: 0 }}>
+                Hay una nueva versión disponible. Te recomendamos actualizarla para
+                tener las últimas mejoras y correcciones.
+              </p>
+            </>
+          )}
+
+          {status === "downloading" && (
+            <>
+              <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 14 }}>
+                Descargando OpticApp v{info?.version}...
+              </div>
+              <div style={{ height: 10, borderRadius: 999, background: "var(--border)", overflow: "hidden" }}>
+                <div style={{
+                  height: "100%",
+                  width: `${info?.percent ?? 0}%`,
+                  background: "var(--green-2)",
+                  borderRadius: 999,
+                  transition: "width 0.4s ease",
+                }} />
+              </div>
+              <div style={{ fontSize: 12, opacity: 0.5, marginTop: 8, textAlign: "right" }}>
+                {info?.percent ?? 0}%
+              </div>
+            </>
+          )}
+
+          {status === "downloaded" && (
+            <>
+              <div style={{ fontSize: 15, fontWeight: 900, marginBottom: 8 }}>
+                OpticApp <span style={{ color: "var(--green-2)" }}>v{info?.version}</span> lista
+              </div>
+              <p style={{ fontSize: 13, opacity: 0.7, lineHeight: 1.6, margin: 0 }}>
+                La actualización se descargó correctamente. Hacé click en
+                <strong> "Instalar y reiniciar"</strong> para aplicarla.
+                La aplicación se cerrará y volverá a abrirse con la versión nueva.
+              </p>
+            </>
+          )}
+        </div>
+
+        {/* Acciones */}
+        <div className="modalActions">
+          {status === "available" && (
+            <>
+              <button className="btn" type="button" onClick={onDismiss}>
+                Ahora no
+              </button>
+              <button className="btn primary" type="button" onClick={onDownload}>
+                Descargar
+              </button>
+            </>
+          )}
+          {status === "downloading" && (
+            <div style={{ fontSize: 13, opacity: 0.5, margin: "0 auto" }}>
+              Esperá mientras se descarga la actualización...
+            </div>
+          )}
+          {status === "downloaded" && (
+            <button className="btn primary" type="button" onClick={onInstall} style={{ width: "100%" }}>
+              Instalar y reiniciar
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [tab, setTab]           = useState("home");
   const [ui,  setUi]            = useState(() => loadUi());
@@ -106,11 +205,42 @@ export default function App() {
   const [licenseStatus, setLicenseStatus] = useState("checking");
   const [licenseExpiresAt, setLicenseExpiresAt] = useState(null);
 
+  // ── Auto-update ────────────────────────────────────────────────────────────
+  const [updateStatus,  setUpdateStatus]  = useState("idle");
+  const [updateInfo,    setUpdateInfo]    = useState(null);
+  const [updateDismissed, setUpdateDismissed] = useState(false);
+
   useEffect(() => {
     window.api.checkLicense().then((res) => {
       setLicenseStatus(res.status);
       setLicenseExpiresAt(res.expiresAt ?? null);
     });
+  }, []);
+
+  useEffect(() => {
+    window.api.onUpdaterStatus?.((data) => {
+      switch (data.event) {
+        case "available":
+          setUpdateStatus("available");
+          setUpdateInfo({ version: data.version });
+          setUpdateDismissed(false);
+          break;
+        case "progress":
+          setUpdateStatus("downloading");
+          setUpdateInfo((p) => ({ ...p, percent: data.percent }));
+          break;
+        case "downloaded":
+          setUpdateStatus("downloaded");
+          setUpdateInfo((p) => ({ ...p, version: data.version }));
+          setUpdateDismissed(false); // reabre el modal cuando termina la descarga
+          break;
+        case "error":
+          setUpdateStatus("idle");
+          break;
+        default: break;
+      }
+    });
+    return () => window.api.offUpdaterStatus?.();
   }, []);
 
   useEffect(() => {
@@ -144,9 +274,29 @@ export default function App() {
 
   let lastSection = null;
 
+  function handleDownload() {
+    setUpdateStatus("downloading");
+    setUpdateInfo((p) => ({ ...p, percent: 0 }));
+    window.api.downloadUpdate?.();
+  }
+
+  function handleInstall() {
+    window.api.installUpdate?.();
+  }
+
+  const showUpdateModal = !updateDismissed &&
+    (updateStatus === "available" || updateStatus === "downloading" || updateStatus === "downloaded");
+
   return (
     <>
     <ToastContainer />
+    <UpdateModal
+      status={showUpdateModal ? updateStatus : null}
+      info={updateInfo}
+      onDownload={handleDownload}
+      onInstall={handleInstall}
+      onDismiss={() => setUpdateDismissed(true)}
+    />
     <div className="appLayout">
       <aside className="sidebar">
         <div className="sidebarHeader">
