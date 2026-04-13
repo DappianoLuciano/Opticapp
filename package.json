@@ -68,7 +68,7 @@
     },
     "publish": {
       "provider": "github",
-      "owner": "TU_USUARIO_GITHUB",
+      "owner": "DappianoLuciano",
       "repo": "opticapp"
     }
   }
