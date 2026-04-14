@@ -331,10 +331,17 @@ export default function ConfiguracionPage({ licenseModules = [] }) {
           setUpdateStatus("downloaded");
           setUpdateInfo((p) => ({ ...p, version: data.version }));
           break;
-        case "error":
-          setUpdateStatus("error");
-          setUpdateInfo({ message: data.message });
+        case "error": {
+          const msg = data.message ?? "";
+          const noVersions = msg.includes("No published versions") || msg.includes("404");
+          if (noVersions) {
+            setUpdateStatus("not-available");
+          } else {
+            setUpdateStatus("error");
+            setUpdateInfo({ message: "No se pudo verificar actualizaciones. Intentá de nuevo más tarde." });
+          }
           break;
+        }
         default: break;
       }
     });
@@ -691,11 +698,9 @@ export default function ConfiguracionPage({ licenseModules = [] }) {
               {appVersion ? <>Versión instalada: <strong>v{appVersion}</strong></> : "Versión actual de OpticApp."}
             </div>
           </div>
-          {updateStatus !== "downloading" && updateStatus !== "downloaded" && (
-            <button className="btn primary" type="button" onClick={doCheckUpdate} disabled={updateLoading || updateStatus === "checking"}>
-              {updateStatus === "checking" ? "Verificando..." : "Buscar actualizaciones"}
-            </button>
-          )}
+          <button className="btn primary" type="button" onClick={doCheckUpdate} disabled={updateLoading || updateStatus === "checking"}>
+            {updateStatus === "checking" ? "Verificando..." : "Buscar actualizaciones"}
+          </button>
         </div>
 
         {updateStatus !== "idle" && (
@@ -705,62 +710,22 @@ export default function ConfiguracionPage({ licenseModules = [] }) {
             )}
 
             {updateStatus === "not-available" && (
-              <div style={{ fontSize: 13, color: "#0b7a55", fontWeight: 700 }}>
-                La aplicación está actualizada.
+              <div style={{ fontSize: 13, color: "var(--green-2)", fontWeight: 700 }}>
+                Tenés la última versión instalada.
               </div>
             )}
 
             {updateStatus === "error" && (
               <div style={{ fontSize: 13, color: "#b91c1c", fontWeight: 600 }}>
-                {updateInfo?.message || "Error al verificar actualizaciones."}
-                {updateInfo?.message?.includes("desarrollo") && (
-                  <span style={{ opacity: 0.6, fontWeight: 400 }}> (normal en modo dev)</span>
-                )}
+                {updateInfo?.message || "No se pudo verificar actualizaciones. Intentá de nuevo más tarde."}
               </div>
             )}
 
-            {updateStatus === "available" && (
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: 10, background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.25)" }}>
-                <div>
-                  <div style={{ fontWeight: 900, fontSize: 14 }}>
-                    Nueva versión disponible: <span style={{ color: "#4f46e5" }}>v{updateInfo?.version}</span>
-                  </div>
-                  {updateInfo?.releaseNotes && (
-                    <div style={{ fontSize: 12, opacity: 0.65, marginTop: 4, maxWidth: 400 }}
-                      dangerouslySetInnerHTML={{ __html: String(updateInfo.releaseNotes).replace(/<[^>]*>/g, " ").slice(0, 200) }}
-                    />
-                  )}
-                </div>
-                <button className="btn primary" type="button" onClick={doDownload} style={{ flexShrink: 0, marginLeft: 16 }}>
-                  Descargar
-                </button>
-              </div>
-            )}
-
-            {updateStatus === "downloading" && (
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>
-                  Descargando actualización... {updateInfo?.percent ?? 0}%
-                </div>
-                <div style={{ height: 8, borderRadius: 999, background: "var(--border)", overflow: "hidden" }}>
-                  <div style={{ height: "100%", width: `${updateInfo?.percent ?? 0}%`, background: "var(--green-2)", borderRadius: 999, transition: "width 0.3s" }} />
-                </div>
-              </div>
-            )}
-
-            {updateStatus === "downloaded" && (
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: 10, background: "rgba(122,216,176,0.10)", border: "1px solid rgba(85,201,154,0.35)" }}>
-                <div>
-                  <div style={{ fontWeight: 900, fontSize: 14 }}>
-                    v{updateInfo?.version} lista para instalar
-                  </div>
-                  <div style={{ fontSize: 12, opacity: 0.65, marginTop: 3 }}>
-                    La aplicación se reiniciará para completar la actualización.
-                  </div>
-                </div>
-                <button className="btn primary" type="button" onClick={doInstall} style={{ flexShrink: 0, marginLeft: 16 }}>
-                  Instalar y reiniciar
-                </button>
+            {(updateStatus === "available" || updateStatus === "downloading" || updateStatus === "downloaded") && (
+              <div style={{ fontSize: 13, opacity: 0.6 }}>
+                {updateStatus === "available"   && "Se encontró una actualización. Revisá el aviso en pantalla."}
+                {updateStatus === "downloading" && `Descargando actualización... ${updateInfo?.percent ?? 0}%`}
+                {updateStatus === "downloaded"  && "Actualización lista. Revisá el aviso en pantalla para instalarla."}
               </div>
             )}
           </div>
