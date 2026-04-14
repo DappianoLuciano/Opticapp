@@ -13,7 +13,6 @@ import HomePage           from "./pages/HomePage";
 import PacientesPage      from "./pages/PacientesPage";
 import TurnosPage         from "./pages/TurnosPage";
 import ConfiguracionPage  from "./pages/ConfiguracionPage";
-import CajaDiariaPage     from "./pages/CajaDiariaPage";
 import { ToastContainer, toast } from "./components/Toast";
 
 // Páginas pesadas — cargadas bajo demanda (code splitting)
