@@ -143,14 +143,6 @@ contextBridge.exposeInMainWorld("api", {
   activateLicense: (code) => ipcRenderer.invoke("license:activate", code),
 
   // =========================
-  // BACKUP
-  // =========================
-  backupSave:        ()  => ipcRenderer.invoke("backup:save"),
-  backupInfo:        ()  => ipcRenderer.invoke("backup:info"),
-  backupPickFolder:  ()  => ipcRenderer.invoke("backup:pickFolder"),
-  backupClearFolder: ()  => ipcRenderer.invoke("backup:clearFolder"),
-
-  // =========================
   // AUTO-UPDATE
   // =========================
   checkForUpdates:  ()   => ipcRenderer.invoke("updater:check"),
@@ -159,6 +151,14 @@ contextBridge.exposeInMainWorld("api", {
   getAppVersion:    ()   => ipcRenderer.invoke("updater:version"),
   onUpdaterStatus:  (cb) => ipcRenderer.on("updater:status", (_e, d) => cb(d)),
   offUpdaterStatus: ()   => ipcRenderer.removeAllListeners("updater:status"),
+
+  // =========================
+  // GOOGLE DRIVE BACKUP
+  // =========================
+  gdriveStatus:     ()  => ipcRenderer.invoke("gdrive:status"),
+  gdriveConnect:    ()  => ipcRenderer.invoke("gdrive:connect"),
+  gdriveDisconnect: ()  => ipcRenderer.invoke("gdrive:disconnect"),
+  gdriveBackup:     ()  => ipcRenderer.invoke("gdrive:backup"),
 
   // =========================
   // CAJA

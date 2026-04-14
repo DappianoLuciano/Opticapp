@@ -386,7 +386,7 @@ export default function App() {
               {tab === "pacientes"      && <PacientesPage         />}
               {tab === "buscarPaciente" && <BuscarPacientesPage   />}
               {tab === "inventario"     && <InventarioPage        />}
-              {tab === "config"         && <ConfiguracionPage     />}
+              {tab === "config"         && <ConfiguracionPage     licenseModules={licenseModules} />}
               {tab === "proveedores"    && <ProveedoresPage       />}
               {tab === "buscarRecetas"  && <BuscarRecetasPage     />}
               {tab === "gastos"         && <GastosPage            />}

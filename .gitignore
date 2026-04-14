@@ -1,6 +1,9 @@
 # Claude Code (configuración local, no subir)
 .claude/
 
+# Credenciales privadas de Google Drive (no subir al repo)
+main/gdrive-credentials.js
+
 # Base de datos local y backups
 *.db
 opticapp-settings.json

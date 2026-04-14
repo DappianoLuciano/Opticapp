@@ -13,7 +13,7 @@ const { registerVentas }     = require("./ventas");
 const { registerCaja }       = require("./caja");
 const { registerTurnos }     = require("./turnos");
 const { registerWhatsapp }   = require("./whatsapp-ipc");
-const { registerBackup }     = require("./backup");
+const { registerBackupCloud } = require("./backup-cloud");
 
 function registerIpcHandlers() {
   registerConfig();
@@ -26,7 +26,7 @@ function registerIpcHandlers() {
   registerCaja();
   registerTurnos();
   registerWhatsapp();
-  registerBackup();
+  registerBackupCloud();
 
   // ── Sistema ──────────────────────────────────────────────────────────────
   safeHandle("system:openExternal", async (_evt, url) => {

@@ -7,7 +7,6 @@ const { setupDatabase }           = require("./setup-db");
 const { prisma }                  = require("./db");
 const { setWindow, initWhatsApp } = require("./whatsapp");
 const { startScheduler }          = require("./scheduler");
-const { runAutoBackup }           = require("./ipc/backup");
 const { setupUpdater }            = require("./updater");
 
 let win;
@@ -17,9 +16,6 @@ async function createWindow() {
 
   registerIpcHandlers();
   registerLicenseHandlers();
-
-  // Backup automático al iniciar (silencioso, guarda en userData/backups/)
-  runAutoBackup();
 
   session.defaultSession.setPermissionRequestHandler((_webContents, permission, callback) => {
     callback(permission === "media");

@@ -90,7 +90,7 @@ function WaBadge({ status }) {
   );
 }
 
-export default function ConfiguracionPage() {
+export default function ConfiguracionPage({ licenseModules = [] }) {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -120,8 +120,12 @@ export default function ConfiguracionPage() {
   const [licenseInfo, setLicenseInfo] = useState(null); // { status, expiresAt, daysLeft }
 
   // ── Backup ────────────────────────────────────────────────────────────────
-  const [backupInfo,    setBackupInfo]    = useState(null); // { folder, isCloud, files }
   const [backupLoading, setBackupLoading] = useState(false);
+
+  // ── Google Drive Backup ───────────────────────────────────────────────────
+  const [gdriveConnected, setGdriveConnected] = useState(false);
+  const [gdriveLoading,   setGdriveLoading]   = useState(false);
+  const [gdriveMsg,       setGdriveMsg]       = useState(null); // { ok, text }
 
   // ── Auto-update ───────────────────────────────────────────────────────────
   const [appVersion,    setAppVersion]    = useState("");
@@ -220,48 +224,48 @@ export default function ConfiguracionPage() {
     }
   }
 
-  async function loadBackupInfo() {
+  // ── Google Drive helpers ───────────────────────────────────────────────────
+  async function loadGdriveStatus() {
     try {
-      const info = await window.api.backupInfo();
-      setBackupInfo(info);
+      const res = await window.api.gdriveStatus?.();
+      setGdriveConnected(!!res?.connected);
     } catch { /* no crítico */ }
   }
 
-  async function doManualBackup() {
-    setBackupLoading(true);
+  async function doGdriveConnect() {
+    setGdriveLoading(true);
+    setGdriveMsg(null);
     try {
-      const res = await window.api.backupSave();
-      if (res?.canceled) return;
-      toast.success("Copia de seguridad guardada correctamente.");
-      loadBackupInfo();
+      await window.api.gdriveConnect();
+      setGdriveConnected(true);
+      setGdriveMsg({ ok: true, text: "¡Conectado con Google Drive!" });
     } catch (e) {
-      toast.error(e?.message || "Error al guardar la copia de seguridad");
+      setGdriveMsg({ ok: false, text: e?.message || "Error al conectar con Google Drive" });
     } finally {
-      setBackupLoading(false);
+      setGdriveLoading(false);
     }
   }
 
-  async function doPickFolder() {
-    setBackupLoading(true);
+  async function doGdriveDisconnect() {
     try {
-      const res = await window.api.backupPickFolder();
-      if (res?.canceled) return;
-      toast.success("Carpeta de respaldo configurada.");
-      loadBackupInfo();
+      await window.api.gdriveDisconnect();
+      setGdriveConnected(false);
+      setGdriveMsg({ ok: true, text: "Desconectado de Google Drive." });
     } catch (e) {
-      toast.error(e?.message || "Error al elegir la carpeta");
-    } finally {
-      setBackupLoading(false);
+      toast.error(e?.message || "Error al desconectar");
     }
   }
 
-  async function doClearFolder() {
+  async function doGdriveBackupNow() {
+    setGdriveLoading(true);
+    setGdriveMsg(null);
     try {
-      await window.api.backupClearFolder();
-      toast.info("Volviste al almacenamiento local por defecto.");
-      loadBackupInfo();
+      const res = await window.api.gdriveBackup();
+      setGdriveMsg({ ok: true, text: `Backup subido: ${res.name}` });
     } catch (e) {
-      toast.error(e?.message || "Error");
+      setGdriveMsg({ ok: false, text: e?.message || "Error al subir el backup" });
+    } finally {
+      setGdriveLoading(false);
     }
   }
 
@@ -301,7 +305,7 @@ export default function ConfiguracionPage() {
   useEffect(() => {
     applyTheme(themeKey);
     load();
-    loadBackupInfo();
+    loadGdriveStatus();
 
     // Versión actual
     window.api.getAppVersion?.().then((r) => setAppVersion(r?.version ?? "")).catch(() => {});
@@ -616,72 +620,67 @@ export default function ConfiguracionPage() {
         </section>
       )}
 
-      {/* ── Copia de seguridad ── */}
-      <section className="card" style={{ marginBottom: 16 }}>
-        <div className="rowBetween" style={{ flexWrap: "wrap", gap: 10 }}>
-          <div>
-            <h3 style={{ margin: 0 }}>Copia de seguridad</h3>
-            <div className="hint" style={{ marginTop: 6 }}>
-              Se genera una copia automática cada vez que abrís la aplicación (se conservan las últimas 15).
-              Para respaldar en la nube, elegí una carpeta sincronizada de Google Drive, OneDrive o Dropbox.
-            </div>
-          </div>
-          <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-            <button className="btn" type="button" onClick={doManualBackup} disabled={backupLoading}>
-              {backupLoading ? "Guardando..." : "Guardar copia ahora"}
-            </button>
-            <button className="btn primary" type="button" onClick={doPickFolder} disabled={backupLoading}>
-              Elegir carpeta
-            </button>
-          </div>
-        </div>
-
-        {backupInfo && (
-          <div style={{ marginTop: 14 }}>
-            {/* Carpeta actual */}
-            <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", borderRadius: 8, background: "var(--bg)", border: "1px solid var(--border)", fontSize: 13, marginBottom: 12 }}>
-              <span style={{ fontSize: 16 }}>{backupInfo.isCloud ? "☁" : "💾"}</span>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontWeight: 800, fontSize: 12, opacity: 0.5, marginBottom: 2 }}>
-                  {backupInfo.isCloud ? "Carpeta en la nube" : "Almacenamiento local (por defecto)"}
-                </div>
-                <div style={{ fontSize: 12, opacity: 0.7, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {backupInfo.folder}
-                </div>
+      {/* ── Backup en Google Drive (módulo backup_cloud) ── */}
+      {licenseModules.includes("backup_cloud") && (
+        <section className="card" style={{ marginBottom: 16 }}>
+          <div className="rowBetween" style={{ flexWrap: "wrap", gap: 10 }}>
+            <div>
+              <h3 style={{ margin: 0 }}>Backup automático en Google Drive</h3>
+              <div className="hint" style={{ marginTop: 6 }}>
+                Se sube una copia de la base de datos a tu Google Drive <b>cada 7 días</b> de forma automática.
+                Las copias quedan en la carpeta <strong>"OpticApp Backups"</strong> de tu Drive (se conservan las últimas 12).
               </div>
-              {backupInfo.isCloud && (
-                <button className="btn" type="button" onClick={doClearFolder} style={{ fontSize: 11, padding: "4px 10px", flexShrink: 0 }}>
-                  Quitar
-                </button>
-              )}
             </div>
+            <span style={{
+              fontSize: 12, fontWeight: 900, padding: "3px 10px", borderRadius: 999,
+              background: gdriveConnected ? "rgba(85,201,154,0.15)" : "rgba(100,116,139,0.12)",
+              color: gdriveConnected ? "#0b7a55" : "#64748b",
+              border: `1px solid ${gdriveConnected ? "#0b7a5533" : "#64748b33"}`,
+              flexShrink: 0,
+            }}>
+              {gdriveConnected ? "Conectado" : "No conectado"}
+            </span>
+          </div>
 
-            {/* Lista de copias */}
-            <div style={{ fontSize: 11, fontWeight: 900, opacity: 0.45, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>
-              Copias automáticas ({backupInfo.files.length})
-            </div>
-            {backupInfo.files.length === 0 ? (
-              <div className="empty">No hay copias automáticas en esta carpeta todavía.</div>
+          <div style={{ marginTop: 14, display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+            {!gdriveConnected ? (
+              <button className="btn primary" type="button" onClick={doGdriveConnect} disabled={gdriveLoading}>
+                {gdriveLoading ? "Abriendo navegador..." : "Conectar con Google Drive"}
+              </button>
             ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-                {backupInfo.files.slice(0, 5).map((f) => (
-                  <div key={f.name} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 12px", borderRadius: 8, background: "var(--bg)", border: "1px solid var(--border)", fontSize: 12 }}>
-                    <span style={{ fontWeight: 700, opacity: 0.8 }}>{f.name}</span>
-                    <span style={{ opacity: 0.5 }}>
-                      {new Date(f.mtime).toLocaleString("es-AR")} · {(f.size / 1024).toFixed(0)} KB
-                    </span>
-                  </div>
-                ))}
-                {backupInfo.files.length > 5 && (
-                  <div style={{ fontSize: 12, opacity: 0.45, paddingLeft: 4 }}>
-                    y {backupInfo.files.length - 5} más...
-                  </div>
-                )}
-              </div>
+              <>
+                <button className="btn primary" type="button" onClick={doGdriveBackupNow} disabled={gdriveLoading}>
+                  {gdriveLoading ? "Subiendo..." : "Subir backup ahora"}
+                </button>
+                <button className="btn" type="button" onClick={doGdriveDisconnect} disabled={gdriveLoading}>
+                  Desconectar
+                </button>
+              </>
             )}
           </div>
-        )}
-      </section>
+
+          {gdriveMsg && (
+            <div style={{
+              marginTop: 12, padding: "10px 14px", borderRadius: 8, fontSize: 13, fontWeight: 600,
+              background: gdriveMsg.ok ? "rgba(85,201,154,0.10)" : "rgba(185,28,28,0.08)",
+              border: `1px solid ${gdriveMsg.ok ? "rgba(85,201,154,0.35)" : "rgba(185,28,28,0.25)"}`,
+              color: gdriveMsg.ok ? "#0b7a55" : "#b91c1c",
+            }}>
+              {gdriveMsg.text}
+            </div>
+          )}
+
+          {!gdriveConnected && (
+            <div style={{ marginTop: 14, padding: "12px 14px", borderRadius: 8, background: "var(--bg)", border: "1px solid var(--border)", fontSize: 12, opacity: 0.7, lineHeight: 1.8 }}>
+              <div style={{ fontWeight: 800, marginBottom: 6, opacity: 1 }}>Cómo conectar:</div>
+              1. Hacé clic en <strong>"Conectar con Google Drive"</strong><br />
+              2. Se va a abrir el navegador con la pantalla de Google<br />
+              3. Iniciá sesión y dale permiso a OpticApp<br />
+              4. Volvé a la app — la conexión queda guardada
+            </div>
+          )}
+        </section>
+      )}
 
       {/* ── Actualizaciones ── */}
       <section className="card" style={{ marginBottom: 16 }}>

@@ -43,7 +43,7 @@ function BarChart({ meses }) {
           width={50}
         />
         <Tooltip content={<ChartTooltip />} />
-        <Legend wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
+        <Legend wrapperStyle={{ fontSize: 12, paddingTop: 8, color: "var(--text)" }} />
         <Bar dataKey="ventasCobradas" name="Cobrado" fill="#55c99a" radius={[4, 4, 0, 0]} maxBarSize={40} />
         <Bar dataKey="gastos" name="Gastos" fill="#f87171" radius={[4, 4, 0, 0]} maxBarSize={40} />
       </RechartBar>

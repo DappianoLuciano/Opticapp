@@ -4,7 +4,7 @@ const path = require("path");
 const { app, ipcMain } = require("electron");
 const { verifyCode } = require("./license-utils");
 
-const ALLOWED_MODULES = ["panel", "turnos", "pacientes", "recetas", "inventario", "finanzas"];
+const ALLOWED_MODULES = ["panel", "turnos", "pacientes", "recetas", "inventario", "finanzas", "backup_cloud"];
 
 function getLicensePath() {
   return path.join(app.getPath("userData"), "license.json");
