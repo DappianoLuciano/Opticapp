@@ -1,5 +1,5 @@
 // src/App.jsx
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import ActivationPage, { BlockedPage } from "./pages/ActivationPage";
 import "./styles/base.css";
 import "./styles/components.css";
@@ -14,7 +14,7 @@ import PacientesPage      from "./pages/PacientesPage";
 import TurnosPage         from "./pages/TurnosPage";
 import ConfiguracionPage  from "./pages/ConfiguracionPage";
 import CajaDiariaPage     from "./pages/CajaDiariaPage";
-import { ToastContainer } from "./components/Toast";
+import { ToastContainer, toast } from "./components/Toast";
 
 // Páginas pesadas — cargadas bajo demanda (code splitting)
 const BuscarPacientesPage  = lazy(() => import("./pages/BuscarPacientesPage"));
@@ -83,20 +83,20 @@ function applyTheme(key) {
 }
 
 const NAV = [
-  { section: "Inicio",     key: "home",           label: "Home" },
-  { section: null,         key: "panel",          label: "Panel Profesional" },
-  { section: null,         key: "turnos",          label: "Turnos" },
-  { section: "Pacientes",  key: "pacientes",       label: "Crear Paciente" },
-  { section: null,         key: "buscarPaciente",  label: "Buscar Paciente" },
-  { section: "Recetas",    key: "receta",          label: "Nueva Receta" },
-  { section: null,         key: "buscarRecetas",   label: "Buscar Recetas" },
-  { section: "Inventario", key: "inventario",      label: "Inventario" },
-  { section: null,         key: "proveedores",     label: "Proveedores" },
-  { section: "Finanzas",   key: "ventas",          label: "Ventas" },
-  { section: null,         key: "caja",            label: "Caja" },
-  { section: null,         key: "balance",         label: "Balance" },
-  { section: null,         key: "gastos",          label: "Gastos" },
-  { section: "Sistema",    key: "config",          label: "Configuración" },
+  { section: "Inicio",     key: "home",           label: "Home",              modulo: null },
+  { section: null,         key: "panel",          label: "Panel Profesional", modulo: "panel" },
+  { section: null,         key: "turnos",         label: "Turnos",            modulo: "turnos" },
+  { section: "Pacientes",  key: "pacientes",      label: "Crear Paciente",    modulo: "pacientes" },
+  { section: null,         key: "buscarPaciente", label: "Buscar Paciente",   modulo: "pacientes" },
+  { section: "Recetas",    key: "receta",         label: "Nueva Receta",      modulo: "recetas" },
+  { section: null,         key: "buscarRecetas",  label: "Buscar Recetas",    modulo: "recetas" },
+  { section: "Inventario", key: "inventario",     label: "Inventario",        modulo: "inventario" },
+  { section: null,         key: "proveedores",    label: "Proveedores",       modulo: "inventario" },
+  { section: "Finanzas",   key: "ventas",         label: "Ventas",            modulo: "finanzas" },
+  { section: null,         key: "caja",           label: "Caja",              modulo: "finanzas" },
+  { section: null,         key: "balance",        label: "Balance",           modulo: "finanzas" },
+  { section: null,         key: "gastos",         label: "Gastos",            modulo: "finanzas" },
+  { section: "Sistema",    key: "config",         label: "Configuración",     modulo: null },
 ];
 
 // ── Modal de actualización ────────────────────────────────────────────────────
@@ -202,8 +202,10 @@ export default function App() {
   const [tab, setTab]           = useState("home");
   const [ui,  setUi]            = useState(() => loadUi());
   // "checking" | "inactive" | "active" | "expired"
-  const [licenseStatus, setLicenseStatus] = useState("checking");
+  const [licenseStatus,    setLicenseStatus]    = useState("checking");
   const [licenseExpiresAt, setLicenseExpiresAt] = useState(null);
+  const [licenseModules,   setLicenseModules]   = useState([]);
+  const [licenseClient,    setLicenseClient]    = useState(null);
 
   // ── Auto-update ────────────────────────────────────────────────────────────
   const [updateStatus,  setUpdateStatus]  = useState("idle");
@@ -214,6 +216,8 @@ export default function App() {
     window.api.checkLicense().then((res) => {
       setLicenseStatus(res.status);
       setLicenseExpiresAt(res.expiresAt ?? null);
+      setLicenseModules(res.modules ?? []);
+      setLicenseClient(res.client ?? null);
     });
   }, []);
 
@@ -258,10 +262,43 @@ export default function App() {
     };
   }, []);
 
+  // NAV filtrado por módulos habilitados en la licencia
+  // (debe estar ANTES de los returns condicionales — reglas de hooks)
+  const visibleNav = useMemo(() => {
+    const filtered = NAV.filter(
+      ({ modulo }) => modulo === null || licenseModules.includes(modulo)
+    );
+    const sectionsPresentes = new Set(filtered.map((i) => i.section).filter(Boolean));
+    let lastSection = null;
+    return filtered.map((item) => {
+      const showDivider = !!item.section &&
+        item.section !== lastSection &&
+        sectionsPresentes.has(item.section);
+      if (showDivider) lastSection = item.section;
+      return { ...item, showDivider };
+    });
+  }, [licenseModules]);
+
+  // Si la pestaña activa quedó fuera de los módulos, volver a home
+  useEffect(() => {
+    if (licenseStatus !== "active") return;
+    if (!visibleNav.some((i) => i.key === tab)) setTab("home");
+  }, [visibleNav, licenseStatus]);
+
   if (licenseStatus === "checking") return null;
   if (licenseStatus === "expired")  return <BlockedPage />;
   if (licenseStatus === "inactive") {
-    return <ActivationPage onActivated={() => setLicenseStatus("active")} />;
+    return (
+      <ActivationPage
+        onActivated={(res) => {
+          setLicenseStatus("active");
+          setLicenseModules(res.modules ?? []);
+          setLicenseClient(res.client ?? null);
+          setLicenseExpiresAt(res.expiresAt ?? null);
+          toast.success(`Bienvenido, ${res.client}. Licencia activada.`);
+        }}
+      />
+    );
   }
 
   // Warning de licencia: mostrar si quedan 7 días o menos
@@ -271,8 +308,6 @@ export default function App() {
     const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
     return days <= 7 ? days : null;
   })();
-
-  let lastSection = null;
 
   function handleDownload() {
     setUpdateStatus("downloading");
@@ -304,10 +339,7 @@ export default function App() {
         </div>
 
         <nav className="sideNav">
-          {NAV.map(({ section, key, label }) => {
-            const showDivider = section && section !== lastSection;
-            if (showDivider) lastSection = section;
-            return (
+          {visibleNav.map(({ key, label, section, showDivider }) => (
               <div key={key}>
                 {showDivider && (
                   <div style={{
@@ -326,8 +358,7 @@ export default function App() {
                   {label}
                 </button>
               </div>
-            );
-          })}
+            ))}
         </nav>
       </aside>
 
