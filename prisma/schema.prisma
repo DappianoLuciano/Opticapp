@@ -156,6 +156,13 @@ model EvolucionRefraccion {
   tratamiento String?
   formato     String?
   dip         Float?
+  montaje     String?
+
+  doctor      String?
+  patologia   String?
+  obs         String?
+
+  fotos       FotoEvolucion[]
 
   createdAt DateTime @default(now())
   paciente  Paciente @relation(fields: [pacienteId], references: [id])
@@ -163,6 +170,15 @@ model EvolucionRefraccion {
 
   @@index([pacienteId])
   @@index([fecha])
+}
+
+model FotoEvolucion {
+  id            Int                  @id @default(autoincrement())
+  evolucionId   Int
+  evolucion     EvolucionRefraccion  @relation(fields: [evolucionId], references: [id], onDelete: Cascade)
+  foto          String               // base64 JPEG
+  observaciones String               @default("")
+  createdAt     DateTime             @default(now())
 }
 
 model ServicioOptica {

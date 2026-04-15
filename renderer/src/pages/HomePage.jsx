@@ -358,10 +358,10 @@ export default function HomePage({ onNavigate }) {
       </div>
 
       {/* ── Cuerpo: calendario + secciones ── */}
-      <div className="grid2" style={{ flex: 1, alignItems: "stretch", overflow: "hidden", minHeight: 0 }}>
+      <div style={{ flex: 1, display: "flex", gap: 14, alignItems: "stretch", overflow: "hidden", minHeight: 0 }}>
 
-        {/* Columna izquierda: calendario */}
-        <section className="card" style={{ overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        {/* Columna izquierda: calendario — ancho fijo */}
+        <section className="card" style={{ width: 320, minWidth: 300, maxWidth: 340, flexShrink: 0, overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <div className="rowBetween" style={{ marginBottom: 10 }}>
             <div style={{ fontWeight: 900, fontSize: 16 }}>{monthLabel}</div>
             <div style={{ display: "flex", gap: 10 }}>
@@ -370,7 +370,7 @@ export default function HomePage({ onNavigate }) {
               <button className="btn" type="button" onClick={() => setYm((p) => addMonths(p.year, p.monthIndex, +1))}>▶</button>
             </div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 4 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 36px)", gap: 4, justifyContent: "center" }}>
             {["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"].map((d) => (
               <div key={d} style={{ fontSize: 11, fontWeight: 900, opacity: 0.6, textAlign: "center", padding: "4px 0" }}>{d}</div>
             ))}
@@ -382,7 +382,7 @@ export default function HomePage({ onNavigate }) {
               const vcount  = vencimientoCountByDay.get(iso) || 0;
               return (
                 <button key={iso} type="button" onClick={() => setSelectedDate(iso)} style={{
-                  width: "100%", aspectRatio: "1 / 1", display: "flex", alignItems: "center",
+                  width: 36, height: 36, display: "flex", alignItems: "center",
                   justifyContent: "center", position: "relative", fontWeight: 900, fontSize: 13,
                   borderRadius: 10,
                   border: isSel ? "1px solid rgba(85,201,154,0.55)" : isToday ? "1px solid rgba(85,201,154,0.30)" : "1px solid transparent",
@@ -413,7 +413,7 @@ export default function HomePage({ onNavigate }) {
         </section>
 
         {/* Columna derecha: 1) Entregas del día, 2) Lentes listos, 3) Próximas, 4) Vencimientos */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, height: "100%", overflowY: "auto", paddingRight: 2, scrollbarWidth: "thin" }}>
+        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 10, height: "100%", overflowY: "auto", paddingRight: 2, scrollbarWidth: "thin" }}>
 
           {/* 1. Entregas del día — solo si hay entregas */}
           {dayList.length > 0 && (

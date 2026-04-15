@@ -1,5 +1,5 @@
 // src/pages/BuscarPacientesPage.jsx
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import trashIcon from "../assets/trash.png";
 import ComboSelect from "../components/ComboSelect";
 import Pagination from "../components/Pagination";
@@ -168,6 +168,18 @@ export default function BuscarPacientesPage() {
   const [evoPatologiaOpen, setEvoPatologiaOpen] = useState(false);
   const [evoObs, setEvoObs] = useState("");
 
+  // ── PESTAÑA FOTO ──────────────────────────────────────────────────────────
+  const [evoTabModo, setEvoTabModo]               = useState("manual"); // "manual" | "foto"
+  const [evoCamStream, setEvoCamStream]           = useState(null);
+  const [evoCamStep, setEvoCamStep]               = useState("camera"); // "camera" | "preview" | "done"
+  const [evoFotosCapturadas, setEvoFotosCapturadas] = useState([]);
+  const [evoCurrentFoto, setEvoCurrentFoto]       = useState(null);
+  const [evoCurrentObs, setEvoCurrentObs]         = useState("");
+  const [evoErrorCam, setEvoErrorCam]             = useState("");
+  const [evoGuardando, setEvoGuardando]           = useState(false);
+  const evoVideoRef    = useRef(null);
+  const evoCamStreamRef = useRef(null);
+
   const [evoErrors, setEvoErrors] = useState({
     fecha: "", distancia: "", odEsf: "", odCil: "", odEje: "",
     oiEsf: "", oiCil: "", oiEje: "", montaje: "", dip: "",
@@ -334,6 +346,105 @@ export default function BuscarPacientesPage() {
     setEvoVidrioOpen(false);
   }
 
+  // ── CÁMARA (modal evo) ────────────────────────────────────────────────────
+  function evoDetenerCamara() {
+    if (evoCamStreamRef.current) {
+      evoCamStreamRef.current.getTracks().forEach((t) => t.stop());
+      evoCamStreamRef.current = null;
+    }
+    setEvoCamStream(null);
+  }
+
+  const evoIniciarCamara = useCallback(async () => {
+    evoDetenerCamara();
+    setEvoErrorCam("");
+    try {
+      const s = await navigator.mediaDevices.getUserMedia({
+        video: { width: { ideal: 1920 }, height: { ideal: 1080 } },
+        audio: false,
+      });
+      setEvoCamStream(s);
+      evoCamStreamRef.current = s;
+      if (evoVideoRef.current) {
+        evoVideoRef.current.srcObject = s;
+        evoVideoRef.current.play();
+      }
+    } catch {
+      setEvoErrorCam("No se pudo acceder a la cámara. Verificá que esté conectada y con permiso.");
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function evoCapturarFoto() {
+    if (!evoVideoRef.current) return;
+    const v = evoVideoRef.current;
+    const canvas = document.createElement("canvas");
+    canvas.width  = v.videoWidth  || 1280;
+    canvas.height = v.videoHeight || 720;
+    canvas.getContext("2d").drawImage(v, 0, 0, canvas.width, canvas.height);
+    setEvoCurrentFoto(canvas.toDataURL("image/jpeg", 0.95));
+    setEvoCurrentObs("");
+    setEvoCamStep("preview");
+    evoDetenerCamara();
+  }
+
+  function evoRepetirFoto() {
+    setEvoCurrentFoto(null);
+    setEvoCurrentObs("");
+    setEvoCamStep("camera");
+    evoIniciarCamara();
+  }
+
+  function evoAgregarOtraFoto() {
+    setEvoFotosCapturadas((prev) => [...prev, { foto: evoCurrentFoto, observaciones: evoCurrentObs }]);
+    setEvoCurrentFoto(null);
+    setEvoCurrentObs("");
+    setEvoCamStep("camera");
+    evoIniciarCamara();
+  }
+
+  function evoUsarEstaFoto() {
+    if (!evoCurrentFoto) return;
+    setEvoFotosCapturadas((prev) => [...prev, { foto: evoCurrentFoto, observaciones: evoCurrentObs }]);
+    setEvoCurrentFoto(null);
+    setEvoCurrentObs("");
+    evoDetenerCamara();
+    setEvoCamStep("done");
+  }
+
+  // Iniciar/detener cámara al cambiar de pestaña
+  useEffect(() => {
+    if (!evoOpen) return;
+    if (evoTabModo === "foto") {
+      setEvoCamStep("camera");
+      setEvoFotosCapturadas([]);
+      setEvoCurrentFoto(null);
+      setEvoCurrentObs("");
+      setEvoErrorCam("");
+      setTimeout(evoIniciarCamara, 120);
+    } else {
+      evoDetenerCamara();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [evoTabModo, evoOpen]);
+
+  // Limpiar cámara al cerrar modal
+  useEffect(() => {
+    if (!evoOpen) evoDetenerCamara();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [evoOpen]);
+
+  // Teclado: Enter/Space captura foto
+  useEffect(() => {
+    function onKey(e) {
+      if (!evoOpen || evoTabModo !== "foto" || evoCamStep !== "camera" || !evoCamStreamRef.current) return;
+      if (e.code === "Enter" || e.code === "Space") { e.preventDefault(); evoCapturarFoto(); }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [evoOpen, evoTabModo, evoCamStep]);
+
   useEffect(() => {
     async function loadEvo() {
       if (!selectedId) { setEvoluciones([]); return; }
@@ -459,6 +570,8 @@ export default function BuscarPacientesPage() {
   function resetEvoNewFields() {
     setEvoMontaje(""); setEvoVidrioId(""); setEvoVidrioQuery(""); setEvoVidrioOpen(false);
     setEvoFechaReceta(""); setEvoDoctor(""); setEvoPatologias([]); setEvoPatologiaQuery(""); setEvoPatologiaOpen(false); setEvoObs("");
+    setEvoTabModo("manual");
+    setEvoFotosCapturadas([]); setEvoCurrentFoto(null); setEvoCurrentObs(""); setEvoErrorCam("");
   }
 
   function openEvoModal() {
@@ -539,9 +652,64 @@ export default function BuscarPacientesPage() {
     return Object.values(next).every((x) => !x);
   }
 
+  function validateEvoFoto() {
+    const next = {
+      fecha: "", distancia: "", odEsf: "", odCil: "", odEje: "",
+      oiEsf: "", oiCil: "", oiEje: "", montaje: "", dip: "",
+    };
+    if (!evoFecha) next.fecha = "La fecha es obligatoria";
+    if (String(evoDip ?? "").trim() !== "") {
+      const dipN = toNumberOrNull(evoDip);
+      if (Number.isNaN(dipN)) next.dip = "DIP inválido";
+    }
+    setEvoErrors(next);
+    return Object.values(next).every((x) => !x);
+  }
+
   async function onSaveEvo(e) {
     e.preventDefault();
     if (!selectedId) return;
+
+    if (evoTabModo === "foto") {
+      const todasFotos = evoCurrentFoto
+        ? [...evoFotosCapturadas, { foto: evoCurrentFoto, observaciones: evoCurrentObs }]
+        : evoFotosCapturadas;
+      if (todasFotos.length === 0) {
+        toast.error("Sacá al menos una foto antes de guardar");
+        return;
+      }
+      const ok = validateEvoFoto();
+      if (!ok) return;
+      setEvoGuardando(true);
+      try {
+        const payload = {
+          pacienteId: selectedId, fecha: evoFecha, distancia: evoDistancia || null,
+          odEsf: null, odCil: null, odEje: null,
+          oiEsf: null, oiCil: null, oiEje: null,
+          tratamiento: evoTratamiento || null, formato: evoFormato || null, dip: String(evoDip).replace(",", ".") || null,
+          montaje: evoMontaje || null,
+          doctor: evoDoctor || null, patologia: evoPatologias.join(", ") || null, obs: evoObs || null,
+          fotos: todasFotos,
+        };
+        if (evoEditId) {
+          await window.api.updateEvolucion({ id: evoEditId, ...payload });
+        } else {
+          await window.api.addEvolucion(payload);
+        }
+        const data = await window.api.listEvoluciones(selectedId);
+        setEvoluciones(Array.isArray(data) ? data : []);
+        toast.success(evoEditId ? "Evolución actualizada" : "Evolución guardada con fotos");
+        evoDetenerCamara();
+        setEvoOpen(false);
+        setEvoEditId(null);
+      } catch (err) {
+        toast.error(err?.message || "Error guardando evolución");
+      } finally {
+        setEvoGuardando(false);
+      }
+      return;
+    }
+
     const ok = validateEvo();
     if (!ok) return;
     try {
@@ -551,9 +719,7 @@ export default function BuscarPacientesPage() {
         oiEsf: String(evoOiEsf).replace(",", "."), oiCil: String(evoOiCil).replace(",", "."), oiEje: String(evoOiEje).trim(),
         tratamiento: evoTratamiento || null, formato: evoFormato || null, dip: String(evoDip).replace(",", ".") || null,
         montaje: evoMontaje || null,
-        fechaReceta: evoFechaReceta || null, doctor: evoDoctor || null,
-        patologias: evoPatologias.length ? evoPatologias : null,
-        obs: evoObs || null,
+        doctor: evoDoctor || null, patologia: evoPatologias.join(", ") || null, obs: evoObs || null,
       };
       if (evoEditId) {
         await window.api.updateEvolucion({ id: evoEditId, ...payload });
@@ -846,6 +1012,84 @@ export default function BuscarPacientesPage() {
             </div>
 
             <form className="form" onSubmit={onSaveEvo}>
+
+              {/* ── TABS ── */}
+              <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+                <button type="button"
+                  className={evoTabModo === "manual" ? "pillBtn active" : "pillBtn"}
+                  onClick={() => setEvoTabModo("manual")}>
+                  Carga manual
+                </button>
+                <button type="button"
+                  className={evoTabModo === "foto" ? "pillBtn active" : "pillBtn"}
+                  onClick={() => setEvoTabModo("foto")}>
+                  Subir foto
+                </button>
+              </div>
+
+              {/* ── SECCIÓN CÁMARA (solo pestaña foto) ── */}
+              {evoTabModo === "foto" && (
+                <div className="card" style={{ padding: 12 }}>
+                  <h4 style={{ margin: "0 0 10px" }}>Fotos de la receta</h4>
+
+                  {evoFotosCapturadas.length > 0 && (
+                    <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
+                      {evoFotosCapturadas.map((f, i) => (
+                        <div key={i} style={{ position: "relative" }}>
+                          <img src={f.foto} alt={`Foto ${i + 1}`}
+                            style={{ width: 72, height: 54, objectFit: "cover", borderRadius: 8, border: "2px solid var(--green-2)" }} />
+                          <span style={{ position: "absolute", bottom: 2, right: 4, fontSize: 10, color: "#fff", fontWeight: 700, textShadow: "0 1px 3px #000" }}>{i + 1}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {evoErrorCam ? (
+                    <div>
+                      <p style={{ color: "#b91c1c", fontSize: 13, margin: "0 0 14px" }}>{evoErrorCam}</p>
+                      <button type="button" className="btn" onClick={evoIniciarCamara}>Reintentar</button>
+                    </div>
+                  ) : evoCamStep === "camera" ? (
+                    <div>
+                      <video ref={evoVideoRef} className="webcamVideo" autoPlay playsInline muted />
+                      <div style={{ display: "flex", gap: 10, alignItems: "center", marginTop: 10, justifyContent: "flex-end" }}>
+                        <button type="button" className="btnGhost" style={{ fontSize: 12, padding: "6px 12px" }}
+                          onClick={evoIniciarCamara} title="Refrescar cámara">
+                          ↺ Refrescar
+                        </button>
+                        <button type="button" className="btn" onClick={evoCapturarFoto} disabled={!evoCamStream}>
+                          Capturar foto
+                          {evoCamStream && <span style={{ opacity: 0.6, fontSize: 11, marginLeft: 6 }}>(Enter / Space)</span>}
+                        </button>
+                      </div>
+                    </div>
+                  ) : evoCamStep === "preview" ? (
+                    <div>
+                      <img src={evoCurrentFoto} alt="Captura" className="capturaPreview" />
+                      <div className="field" style={{ marginTop: 12 }}>
+                        <span>Observaciones de esta foto</span>
+                        <input type="text" value={evoCurrentObs} onChange={(e) => setEvoCurrentObs(e.target.value)}
+                          placeholder="Ej: Frente, reverso..." style={{ minHeight: 36, padding: "6px 10px", fontSize: 13 }} autoFocus />
+                      </div>
+                      <div style={{ display: "flex", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
+                        <button type="button" className="btnGhost" onClick={evoRepetirFoto}>Repetir foto</button>
+                        <button type="button" className="btn primary" style={{ width: "auto" }} onClick={evoUsarEstaFoto}>Usar esta foto</button>
+                        <button type="button" className="btnGhost" onClick={evoAgregarOtraFoto}>+ Agregar otra foto</button>
+                      </div>
+                    </div>
+                  ) : evoCamStep === "done" ? (
+                    <div>
+                      <p style={{ color: "#0b7a55", fontWeight: 700, fontSize: 14, marginBottom: 12 }}>
+                        ✓ {evoFotosCapturadas.length} foto{evoFotosCapturadas.length !== 1 ? "s" : ""} lista{evoFotosCapturadas.length !== 1 ? "s" : ""} para guardar
+                      </p>
+                      <button type="button" className="btnGhost" onClick={() => { setEvoCamStep("camera"); setTimeout(evoIniciarCamara, 120); }}>
+                        + Agregar otra foto
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
+              )}
+
               <div className="grid2">
                 <label className="field">
                   <span>Fecha *</span>
@@ -859,11 +1103,19 @@ export default function BuscarPacientesPage() {
                 </label>
 
                 <label className="field">
-                  <span>Uso *</span>
+                  <span>Uso {evoTabModo === "manual" ? "*" : "(opcional)"}</span>
                   <ComboSelect
                     className={evoErrors.distancia ? "inputError" : ""}
                     value={evoDistancia}
-                    onChange={(v) => { setEvoDistancia(v); clearEvoErr("distancia"); }}
+                    onChange={(v) => {
+                      setEvoDistancia(v);
+                      clearEvoErr("distancia");
+                      if (v === "SOL") {
+                        selectEvoVidrioNinguno();
+                        setEvoFormato("NINGUNO");
+                        setEvoMontaje("NINGUNO");
+                      }
+                    }}
                     options={[
                       { value: "", label: "Seleccionar..." },
                       { value: "LEJOS", label: "Lejos" },
@@ -877,8 +1129,8 @@ export default function BuscarPacientesPage() {
                 </label>
               </div>
 
-              {/* ── GRADUACIÓN ── */}
-              <div className="grid2" style={{ alignItems: "stretch" }}>
+              {/* ── GRADUACIÓN (solo carga manual) ── */}
+              {evoTabModo === "manual" && <div className="grid2" style={{ alignItems: "stretch" }}>
                 <div className="card" style={{ padding: 12 }}>
                   <h4 style={{ margin: "0 0 10px" }}>Ojo derecho (OD)</h4>
                   <div className="grid2" style={{ gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -952,7 +1204,7 @@ export default function BuscarPacientesPage() {
                     <div className="fieldErrorSlot">{evoErrors.oiEje || "\u00A0"}</div>
                   </label>
                 </div>
-              </div>
+              </div>}
 
               {/* ── LENTE + MÉDICO ── */}
               <div className="grid2" style={{ alignItems: "stretch" }}>
@@ -1115,8 +1367,10 @@ export default function BuscarPacientesPage() {
               </div>
 
               <div className="modalActions">
-                <button type="button" className="btn" onClick={() => setEvoOpen(false)}>Cancelar</button>
-                <button type="submit" className="btn primary">Guardar</button>
+                <button type="button" className="btn" onClick={() => setEvoOpen(false)} disabled={evoGuardando}>Cancelar</button>
+                <button type="submit" className="btn primary" disabled={evoGuardando}>
+                  {evoGuardando ? "Guardando..." : "Guardar"}
+                </button>
               </div>
             </form>
           </div>

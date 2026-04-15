@@ -20,6 +20,7 @@ model Paciente {
 
   evoluciones EvolucionRefraccion[]
   recetas     Receta[]
+  turnos      Turno[]
 
   createdAt DateTime @default(now())
 }
@@ -80,6 +81,14 @@ model Receta {
   oiEsf Float?
   oiCil Float?
   oiEje Float?
+
+  distancia2 String?
+  od2Esf     Float?
+  od2Cil     Float?
+  od2Eje     Float?
+  oi2Esf     Float?
+  oi2Cil     Float?
+  oi2Eje     Float?
 
   tratamiento String?
   formato     String?
@@ -147,6 +156,13 @@ model EvolucionRefraccion {
   tratamiento String?
   formato     String?
   dip         Float?
+  montaje     String?
+
+  doctor    String?
+  patologia String?
+  obs       String?
+
+  fotos FotoEvolucion[]
 
   createdAt DateTime  @default(now())
   paciente  Paciente  @relation(fields: [pacienteId], references: [id])
@@ -154,6 +170,15 @@ model EvolucionRefraccion {
 
   @@index([pacienteId])
   @@index([fecha])
+}
+
+model FotoEvolucion {
+  id            Int                 @id @default(autoincrement())
+  evolucionId   Int
+  evolucion     EvolucionRefraccion @relation(fields: [evolucionId], references: [id], onDelete: Cascade)
+  foto          String // base64 JPEG
+  observaciones String              @default("")
+  createdAt     DateTime            @default(now())
 }
 
 model ServicioOptica {
@@ -304,4 +329,21 @@ model DetallePago {
   medioPago String
   monto     Float
   createdAt DateTime @default(now())
+}
+
+model Turno {
+  id             Int       @id @default(autoincrement())
+  fecha          DateTime
+  duracion       Int       @default(30)
+  pacienteId     Int?
+  paciente       Paciente? @relation(fields: [pacienteId], references: [id])
+  nombrePaciente String?
+  telefono       String?
+  motivo         String?
+  notas          String?
+  estado         String    @default("pendiente")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([fecha])
 }

@@ -1,6 +1,24 @@
 // main/whatsapp.js — servicio WhatsApp usando whatsapp-web.js
 const path   = require("path");
+const fs     = require("fs");
 const { app } = require("electron");
+
+// Busca Chrome instalado en rutas comunes de Windows
+function findChrome() {
+  const candidates = [
+    process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, "Google", "Chrome", "Application", "chrome.exe"),
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+    process.env.LOCALAPPDATA && path.join(process.env.LOCALAPPDATA, "Microsoft", "Edge", "Application", "msedge.exe"),
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+    "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
+  ].filter(Boolean);
+
+  for (const p of candidates) {
+    if (fs.existsSync(p)) return p;
+  }
+  return null;
+}
 
 let Client, LocalAuth, QRCode;
 try {
@@ -56,10 +74,19 @@ async function initWhatsApp() {
     ? path.join(app.getPath("userData"), "wwebjs_auth")
     : path.join(__dirname, "..", ".wwebjs_auth");
 
+  const chromePath = findChrome();
+  if (!chromePath) {
+    throw new Error(
+      "No se encontró Google Chrome ni Microsoft Edge instalado.\n" +
+      "Por favor instalá Chrome desde https://www.google.com/chrome/ e intentá de nuevo."
+    );
+  }
+
   waClient = new Client({
     authStrategy: new LocalAuth({ dataPath: sessionPath }),
     puppeteer: {
       headless: true,
+      executablePath: chromePath,
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",

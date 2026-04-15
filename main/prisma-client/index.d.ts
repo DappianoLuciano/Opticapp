@@ -44,6 +44,11 @@ export type FotoReceta = $Result.DefaultSelection<Prisma.$FotoRecetaPayload>
  */
 export type EvolucionRefraccion = $Result.DefaultSelection<Prisma.$EvolucionRefraccionPayload>
 /**
+ * Model FotoEvolucion
+ * 
+ */
+export type FotoEvolucion = $Result.DefaultSelection<Prisma.$FotoEvolucionPayload>
+/**
  * Model ServicioOptica
  * 
  */
@@ -293,6 +298,16 @@ export class PrismaClient<
     * ```
     */
   get evolucionRefraccion(): Prisma.EvolucionRefraccionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fotoEvolucion`: Exposes CRUD operations for the **FotoEvolucion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FotoEvolucions
+    * const fotoEvolucions = await prisma.fotoEvolucion.findMany()
+    * ```
+    */
+  get fotoEvolucion(): Prisma.FotoEvolucionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.servicioOptica`: Exposes CRUD operations for the **ServicioOptica** model.
@@ -849,6 +864,7 @@ export namespace Prisma {
     Receta: 'Receta',
     FotoReceta: 'FotoReceta',
     EvolucionRefraccion: 'EvolucionRefraccion',
+    FotoEvolucion: 'FotoEvolucion',
     ServicioOptica: 'ServicioOptica',
     Configuracion: 'Configuracion',
     Proveedor: 'Proveedor',
@@ -878,7 +894,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "paciente" | "armazon" | "vidrio" | "receta" | "fotoReceta" | "evolucionRefraccion" | "servicioOptica" | "configuracion" | "proveedor" | "movimientoProveedor" | "categoriaGasto" | "gasto" | "cuenta" | "cajaDiaria" | "movimientoCaja" | "detallePago" | "turno"
+      modelProps: "paciente" | "armazon" | "vidrio" | "receta" | "fotoReceta" | "evolucionRefraccion" | "fotoEvolucion" | "servicioOptica" | "configuracion" | "proveedor" | "movimientoProveedor" | "categoriaGasto" | "gasto" | "cuenta" | "cajaDiaria" | "movimientoCaja" | "detallePago" | "turno"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1323,6 +1339,80 @@ export namespace Prisma {
           count: {
             args: Prisma.EvolucionRefraccionCountArgs<ExtArgs>
             result: $Utils.Optional<EvolucionRefraccionCountAggregateOutputType> | number
+          }
+        }
+      }
+      FotoEvolucion: {
+        payload: Prisma.$FotoEvolucionPayload<ExtArgs>
+        fields: Prisma.FotoEvolucionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FotoEvolucionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FotoEvolucionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FotoEvolucionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FotoEvolucionPayload>
+          }
+          findFirst: {
+            args: Prisma.FotoEvolucionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FotoEvolucionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FotoEvolucionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FotoEvolucionPayload>
+          }
+          findMany: {
+            args: Prisma.FotoEvolucionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FotoEvolucionPayload>[]
+          }
+          create: {
+            args: Prisma.FotoEvolucionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FotoEvolucionPayload>
+          }
+          createMany: {
+            args: Prisma.FotoEvolucionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FotoEvolucionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FotoEvolucionPayload>[]
+          }
+          delete: {
+            args: Prisma.FotoEvolucionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FotoEvolucionPayload>
+          }
+          update: {
+            args: Prisma.FotoEvolucionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FotoEvolucionPayload>
+          }
+          deleteMany: {
+            args: Prisma.FotoEvolucionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FotoEvolucionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FotoEvolucionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FotoEvolucionPayload>[]
+          }
+          upsert: {
+            args: Prisma.FotoEvolucionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FotoEvolucionPayload>
+          }
+          aggregate: {
+            args: Prisma.FotoEvolucionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFotoEvolucion>
+          }
+          groupBy: {
+            args: Prisma.FotoEvolucionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FotoEvolucionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FotoEvolucionCountArgs<ExtArgs>
+            result: $Utils.Optional<FotoEvolucionCountAggregateOutputType> | number
           }
         }
       }
@@ -2238,6 +2328,7 @@ export namespace Prisma {
     receta?: RecetaOmit
     fotoReceta?: FotoRecetaOmit
     evolucionRefraccion?: EvolucionRefraccionOmit
+    fotoEvolucion?: FotoEvolucionOmit
     servicioOptica?: ServicioOpticaOmit
     configuracion?: ConfiguracionOmit
     proveedor?: ProveedorOmit
@@ -2463,6 +2554,37 @@ export namespace Prisma {
    */
   export type RecetaCountOutputTypeCountFotosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FotoRecetaWhereInput
+  }
+
+
+  /**
+   * Count Type EvolucionRefraccionCountOutputType
+   */
+
+  export type EvolucionRefraccionCountOutputType = {
+    fotos: number
+  }
+
+  export type EvolucionRefraccionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fotos?: boolean | EvolucionRefraccionCountOutputTypeCountFotosArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EvolucionRefraccionCountOutputType without action
+   */
+  export type EvolucionRefraccionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EvolucionRefraccionCountOutputType
+     */
+    select?: EvolucionRefraccionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EvolucionRefraccionCountOutputType without action
+   */
+  export type EvolucionRefraccionCountOutputTypeCountFotosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FotoEvolucionWhereInput
   }
 
 
@@ -9077,6 +9199,10 @@ export namespace Prisma {
     tratamiento: string | null
     formato: string | null
     dip: number | null
+    montaje: string | null
+    doctor: string | null
+    patologia: string | null
+    obs: string | null
     createdAt: Date | null
     deletedAt: Date | null
   }
@@ -9095,6 +9221,10 @@ export namespace Prisma {
     tratamiento: string | null
     formato: string | null
     dip: number | null
+    montaje: string | null
+    doctor: string | null
+    patologia: string | null
+    obs: string | null
     createdAt: Date | null
     deletedAt: Date | null
   }
@@ -9113,6 +9243,10 @@ export namespace Prisma {
     tratamiento: number
     formato: number
     dip: number
+    montaje: number
+    doctor: number
+    patologia: number
+    obs: number
     createdAt: number
     deletedAt: number
     _all: number
@@ -9157,6 +9291,10 @@ export namespace Prisma {
     tratamiento?: true
     formato?: true
     dip?: true
+    montaje?: true
+    doctor?: true
+    patologia?: true
+    obs?: true
     createdAt?: true
     deletedAt?: true
   }
@@ -9175,6 +9313,10 @@ export namespace Prisma {
     tratamiento?: true
     formato?: true
     dip?: true
+    montaje?: true
+    doctor?: true
+    patologia?: true
+    obs?: true
     createdAt?: true
     deletedAt?: true
   }
@@ -9193,6 +9335,10 @@ export namespace Prisma {
     tratamiento?: true
     formato?: true
     dip?: true
+    montaje?: true
+    doctor?: true
+    patologia?: true
+    obs?: true
     createdAt?: true
     deletedAt?: true
     _all?: true
@@ -9298,6 +9444,10 @@ export namespace Prisma {
     tratamiento: string | null
     formato: string | null
     dip: number | null
+    montaje: string | null
+    doctor: string | null
+    patologia: string | null
+    obs: string | null
     createdAt: Date
     deletedAt: Date | null
     _count: EvolucionRefraccionCountAggregateOutputType | null
@@ -9335,9 +9485,15 @@ export namespace Prisma {
     tratamiento?: boolean
     formato?: boolean
     dip?: boolean
+    montaje?: boolean
+    doctor?: boolean
+    patologia?: boolean
+    obs?: boolean
     createdAt?: boolean
     deletedAt?: boolean
+    fotos?: boolean | EvolucionRefraccion$fotosArgs<ExtArgs>
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
+    _count?: boolean | EvolucionRefraccionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["evolucionRefraccion"]>
 
   export type EvolucionRefraccionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9354,6 +9510,10 @@ export namespace Prisma {
     tratamiento?: boolean
     formato?: boolean
     dip?: boolean
+    montaje?: boolean
+    doctor?: boolean
+    patologia?: boolean
+    obs?: boolean
     createdAt?: boolean
     deletedAt?: boolean
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
@@ -9373,6 +9533,10 @@ export namespace Prisma {
     tratamiento?: boolean
     formato?: boolean
     dip?: boolean
+    montaje?: boolean
+    doctor?: boolean
+    patologia?: boolean
+    obs?: boolean
     createdAt?: boolean
     deletedAt?: boolean
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
@@ -9392,13 +9556,19 @@ export namespace Prisma {
     tratamiento?: boolean
     formato?: boolean
     dip?: boolean
+    montaje?: boolean
+    doctor?: boolean
+    patologia?: boolean
+    obs?: boolean
     createdAt?: boolean
     deletedAt?: boolean
   }
 
-  export type EvolucionRefraccionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "pacienteId" | "fecha" | "distancia" | "odEsf" | "odCil" | "odEje" | "oiEsf" | "oiCil" | "oiEje" | "tratamiento" | "formato" | "dip" | "createdAt" | "deletedAt", ExtArgs["result"]["evolucionRefraccion"]>
+  export type EvolucionRefraccionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "pacienteId" | "fecha" | "distancia" | "odEsf" | "odCil" | "odEje" | "oiEsf" | "oiCil" | "oiEje" | "tratamiento" | "formato" | "dip" | "montaje" | "doctor" | "patologia" | "obs" | "createdAt" | "deletedAt", ExtArgs["result"]["evolucionRefraccion"]>
   export type EvolucionRefraccionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fotos?: boolean | EvolucionRefraccion$fotosArgs<ExtArgs>
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
+    _count?: boolean | EvolucionRefraccionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EvolucionRefraccionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     paciente?: boolean | PacienteDefaultArgs<ExtArgs>
@@ -9410,6 +9580,7 @@ export namespace Prisma {
   export type $EvolucionRefraccionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "EvolucionRefraccion"
     objects: {
+      fotos: Prisma.$FotoEvolucionPayload<ExtArgs>[]
       paciente: Prisma.$PacientePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -9426,6 +9597,10 @@ export namespace Prisma {
       tratamiento: string | null
       formato: string | null
       dip: number | null
+      montaje: string | null
+      doctor: string | null
+      patologia: string | null
+      obs: string | null
       createdAt: Date
       deletedAt: Date | null
     }, ExtArgs["result"]["evolucionRefraccion"]>
@@ -9822,6 +9997,7 @@ export namespace Prisma {
    */
   export interface Prisma__EvolucionRefraccionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    fotos<T extends EvolucionRefraccion$fotosArgs<ExtArgs> = {}>(args?: Subset<T, EvolucionRefraccion$fotosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FotoEvolucionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     paciente<T extends PacienteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PacienteDefaultArgs<ExtArgs>>): Prisma__PacienteClient<$Result.GetResult<Prisma.$PacientePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9865,6 +10041,10 @@ export namespace Prisma {
     readonly tratamiento: FieldRef<"EvolucionRefraccion", 'String'>
     readonly formato: FieldRef<"EvolucionRefraccion", 'String'>
     readonly dip: FieldRef<"EvolucionRefraccion", 'Float'>
+    readonly montaje: FieldRef<"EvolucionRefraccion", 'String'>
+    readonly doctor: FieldRef<"EvolucionRefraccion", 'String'>
+    readonly patologia: FieldRef<"EvolucionRefraccion", 'String'>
+    readonly obs: FieldRef<"EvolucionRefraccion", 'String'>
     readonly createdAt: FieldRef<"EvolucionRefraccion", 'DateTime'>
     readonly deletedAt: FieldRef<"EvolucionRefraccion", 'DateTime'>
   }
@@ -10261,6 +10441,30 @@ export namespace Prisma {
   }
 
   /**
+   * EvolucionRefraccion.fotos
+   */
+  export type EvolucionRefraccion$fotosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionInclude<ExtArgs> | null
+    where?: FotoEvolucionWhereInput
+    orderBy?: FotoEvolucionOrderByWithRelationInput | FotoEvolucionOrderByWithRelationInput[]
+    cursor?: FotoEvolucionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FotoEvolucionScalarFieldEnum | FotoEvolucionScalarFieldEnum[]
+  }
+
+  /**
    * EvolucionRefraccion without action
    */
   export type EvolucionRefraccionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10276,6 +10480,1100 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: EvolucionRefraccionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FotoEvolucion
+   */
+
+  export type AggregateFotoEvolucion = {
+    _count: FotoEvolucionCountAggregateOutputType | null
+    _avg: FotoEvolucionAvgAggregateOutputType | null
+    _sum: FotoEvolucionSumAggregateOutputType | null
+    _min: FotoEvolucionMinAggregateOutputType | null
+    _max: FotoEvolucionMaxAggregateOutputType | null
+  }
+
+  export type FotoEvolucionAvgAggregateOutputType = {
+    id: number | null
+    evolucionId: number | null
+  }
+
+  export type FotoEvolucionSumAggregateOutputType = {
+    id: number | null
+    evolucionId: number | null
+  }
+
+  export type FotoEvolucionMinAggregateOutputType = {
+    id: number | null
+    evolucionId: number | null
+    foto: string | null
+    observaciones: string | null
+    createdAt: Date | null
+  }
+
+  export type FotoEvolucionMaxAggregateOutputType = {
+    id: number | null
+    evolucionId: number | null
+    foto: string | null
+    observaciones: string | null
+    createdAt: Date | null
+  }
+
+  export type FotoEvolucionCountAggregateOutputType = {
+    id: number
+    evolucionId: number
+    foto: number
+    observaciones: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type FotoEvolucionAvgAggregateInputType = {
+    id?: true
+    evolucionId?: true
+  }
+
+  export type FotoEvolucionSumAggregateInputType = {
+    id?: true
+    evolucionId?: true
+  }
+
+  export type FotoEvolucionMinAggregateInputType = {
+    id?: true
+    evolucionId?: true
+    foto?: true
+    observaciones?: true
+    createdAt?: true
+  }
+
+  export type FotoEvolucionMaxAggregateInputType = {
+    id?: true
+    evolucionId?: true
+    foto?: true
+    observaciones?: true
+    createdAt?: true
+  }
+
+  export type FotoEvolucionCountAggregateInputType = {
+    id?: true
+    evolucionId?: true
+    foto?: true
+    observaciones?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type FotoEvolucionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FotoEvolucion to aggregate.
+     */
+    where?: FotoEvolucionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FotoEvolucions to fetch.
+     */
+    orderBy?: FotoEvolucionOrderByWithRelationInput | FotoEvolucionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FotoEvolucionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FotoEvolucions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FotoEvolucions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FotoEvolucions
+    **/
+    _count?: true | FotoEvolucionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FotoEvolucionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FotoEvolucionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FotoEvolucionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FotoEvolucionMaxAggregateInputType
+  }
+
+  export type GetFotoEvolucionAggregateType<T extends FotoEvolucionAggregateArgs> = {
+        [P in keyof T & keyof AggregateFotoEvolucion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFotoEvolucion[P]>
+      : GetScalarType<T[P], AggregateFotoEvolucion[P]>
+  }
+
+
+
+
+  export type FotoEvolucionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FotoEvolucionWhereInput
+    orderBy?: FotoEvolucionOrderByWithAggregationInput | FotoEvolucionOrderByWithAggregationInput[]
+    by: FotoEvolucionScalarFieldEnum[] | FotoEvolucionScalarFieldEnum
+    having?: FotoEvolucionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FotoEvolucionCountAggregateInputType | true
+    _avg?: FotoEvolucionAvgAggregateInputType
+    _sum?: FotoEvolucionSumAggregateInputType
+    _min?: FotoEvolucionMinAggregateInputType
+    _max?: FotoEvolucionMaxAggregateInputType
+  }
+
+  export type FotoEvolucionGroupByOutputType = {
+    id: number
+    evolucionId: number
+    foto: string
+    observaciones: string
+    createdAt: Date
+    _count: FotoEvolucionCountAggregateOutputType | null
+    _avg: FotoEvolucionAvgAggregateOutputType | null
+    _sum: FotoEvolucionSumAggregateOutputType | null
+    _min: FotoEvolucionMinAggregateOutputType | null
+    _max: FotoEvolucionMaxAggregateOutputType | null
+  }
+
+  type GetFotoEvolucionGroupByPayload<T extends FotoEvolucionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FotoEvolucionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FotoEvolucionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FotoEvolucionGroupByOutputType[P]>
+            : GetScalarType<T[P], FotoEvolucionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FotoEvolucionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    evolucionId?: boolean
+    foto?: boolean
+    observaciones?: boolean
+    createdAt?: boolean
+    evolucion?: boolean | EvolucionRefraccionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fotoEvolucion"]>
+
+  export type FotoEvolucionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    evolucionId?: boolean
+    foto?: boolean
+    observaciones?: boolean
+    createdAt?: boolean
+    evolucion?: boolean | EvolucionRefraccionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fotoEvolucion"]>
+
+  export type FotoEvolucionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    evolucionId?: boolean
+    foto?: boolean
+    observaciones?: boolean
+    createdAt?: boolean
+    evolucion?: boolean | EvolucionRefraccionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fotoEvolucion"]>
+
+  export type FotoEvolucionSelectScalar = {
+    id?: boolean
+    evolucionId?: boolean
+    foto?: boolean
+    observaciones?: boolean
+    createdAt?: boolean
+  }
+
+  export type FotoEvolucionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "evolucionId" | "foto" | "observaciones" | "createdAt", ExtArgs["result"]["fotoEvolucion"]>
+  export type FotoEvolucionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    evolucion?: boolean | EvolucionRefraccionDefaultArgs<ExtArgs>
+  }
+  export type FotoEvolucionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    evolucion?: boolean | EvolucionRefraccionDefaultArgs<ExtArgs>
+  }
+  export type FotoEvolucionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    evolucion?: boolean | EvolucionRefraccionDefaultArgs<ExtArgs>
+  }
+
+  export type $FotoEvolucionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FotoEvolucion"
+    objects: {
+      evolucion: Prisma.$EvolucionRefraccionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      evolucionId: number
+      foto: string
+      observaciones: string
+      createdAt: Date
+    }, ExtArgs["result"]["fotoEvolucion"]>
+    composites: {}
+  }
+
+  type FotoEvolucionGetPayload<S extends boolean | null | undefined | FotoEvolucionDefaultArgs> = $Result.GetResult<Prisma.$FotoEvolucionPayload, S>
+
+  type FotoEvolucionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FotoEvolucionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FotoEvolucionCountAggregateInputType | true
+    }
+
+  export interface FotoEvolucionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FotoEvolucion'], meta: { name: 'FotoEvolucion' } }
+    /**
+     * Find zero or one FotoEvolucion that matches the filter.
+     * @param {FotoEvolucionFindUniqueArgs} args - Arguments to find a FotoEvolucion
+     * @example
+     * // Get one FotoEvolucion
+     * const fotoEvolucion = await prisma.fotoEvolucion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FotoEvolucionFindUniqueArgs>(args: SelectSubset<T, FotoEvolucionFindUniqueArgs<ExtArgs>>): Prisma__FotoEvolucionClient<$Result.GetResult<Prisma.$FotoEvolucionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FotoEvolucion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FotoEvolucionFindUniqueOrThrowArgs} args - Arguments to find a FotoEvolucion
+     * @example
+     * // Get one FotoEvolucion
+     * const fotoEvolucion = await prisma.fotoEvolucion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FotoEvolucionFindUniqueOrThrowArgs>(args: SelectSubset<T, FotoEvolucionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FotoEvolucionClient<$Result.GetResult<Prisma.$FotoEvolucionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FotoEvolucion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FotoEvolucionFindFirstArgs} args - Arguments to find a FotoEvolucion
+     * @example
+     * // Get one FotoEvolucion
+     * const fotoEvolucion = await prisma.fotoEvolucion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FotoEvolucionFindFirstArgs>(args?: SelectSubset<T, FotoEvolucionFindFirstArgs<ExtArgs>>): Prisma__FotoEvolucionClient<$Result.GetResult<Prisma.$FotoEvolucionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FotoEvolucion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FotoEvolucionFindFirstOrThrowArgs} args - Arguments to find a FotoEvolucion
+     * @example
+     * // Get one FotoEvolucion
+     * const fotoEvolucion = await prisma.fotoEvolucion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FotoEvolucionFindFirstOrThrowArgs>(args?: SelectSubset<T, FotoEvolucionFindFirstOrThrowArgs<ExtArgs>>): Prisma__FotoEvolucionClient<$Result.GetResult<Prisma.$FotoEvolucionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FotoEvolucions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FotoEvolucionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FotoEvolucions
+     * const fotoEvolucions = await prisma.fotoEvolucion.findMany()
+     * 
+     * // Get first 10 FotoEvolucions
+     * const fotoEvolucions = await prisma.fotoEvolucion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fotoEvolucionWithIdOnly = await prisma.fotoEvolucion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FotoEvolucionFindManyArgs>(args?: SelectSubset<T, FotoEvolucionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FotoEvolucionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FotoEvolucion.
+     * @param {FotoEvolucionCreateArgs} args - Arguments to create a FotoEvolucion.
+     * @example
+     * // Create one FotoEvolucion
+     * const FotoEvolucion = await prisma.fotoEvolucion.create({
+     *   data: {
+     *     // ... data to create a FotoEvolucion
+     *   }
+     * })
+     * 
+     */
+    create<T extends FotoEvolucionCreateArgs>(args: SelectSubset<T, FotoEvolucionCreateArgs<ExtArgs>>): Prisma__FotoEvolucionClient<$Result.GetResult<Prisma.$FotoEvolucionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FotoEvolucions.
+     * @param {FotoEvolucionCreateManyArgs} args - Arguments to create many FotoEvolucions.
+     * @example
+     * // Create many FotoEvolucions
+     * const fotoEvolucion = await prisma.fotoEvolucion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FotoEvolucionCreateManyArgs>(args?: SelectSubset<T, FotoEvolucionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FotoEvolucions and returns the data saved in the database.
+     * @param {FotoEvolucionCreateManyAndReturnArgs} args - Arguments to create many FotoEvolucions.
+     * @example
+     * // Create many FotoEvolucions
+     * const fotoEvolucion = await prisma.fotoEvolucion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FotoEvolucions and only return the `id`
+     * const fotoEvolucionWithIdOnly = await prisma.fotoEvolucion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FotoEvolucionCreateManyAndReturnArgs>(args?: SelectSubset<T, FotoEvolucionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FotoEvolucionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FotoEvolucion.
+     * @param {FotoEvolucionDeleteArgs} args - Arguments to delete one FotoEvolucion.
+     * @example
+     * // Delete one FotoEvolucion
+     * const FotoEvolucion = await prisma.fotoEvolucion.delete({
+     *   where: {
+     *     // ... filter to delete one FotoEvolucion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FotoEvolucionDeleteArgs>(args: SelectSubset<T, FotoEvolucionDeleteArgs<ExtArgs>>): Prisma__FotoEvolucionClient<$Result.GetResult<Prisma.$FotoEvolucionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FotoEvolucion.
+     * @param {FotoEvolucionUpdateArgs} args - Arguments to update one FotoEvolucion.
+     * @example
+     * // Update one FotoEvolucion
+     * const fotoEvolucion = await prisma.fotoEvolucion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FotoEvolucionUpdateArgs>(args: SelectSubset<T, FotoEvolucionUpdateArgs<ExtArgs>>): Prisma__FotoEvolucionClient<$Result.GetResult<Prisma.$FotoEvolucionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FotoEvolucions.
+     * @param {FotoEvolucionDeleteManyArgs} args - Arguments to filter FotoEvolucions to delete.
+     * @example
+     * // Delete a few FotoEvolucions
+     * const { count } = await prisma.fotoEvolucion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FotoEvolucionDeleteManyArgs>(args?: SelectSubset<T, FotoEvolucionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FotoEvolucions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FotoEvolucionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FotoEvolucions
+     * const fotoEvolucion = await prisma.fotoEvolucion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FotoEvolucionUpdateManyArgs>(args: SelectSubset<T, FotoEvolucionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FotoEvolucions and returns the data updated in the database.
+     * @param {FotoEvolucionUpdateManyAndReturnArgs} args - Arguments to update many FotoEvolucions.
+     * @example
+     * // Update many FotoEvolucions
+     * const fotoEvolucion = await prisma.fotoEvolucion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FotoEvolucions and only return the `id`
+     * const fotoEvolucionWithIdOnly = await prisma.fotoEvolucion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FotoEvolucionUpdateManyAndReturnArgs>(args: SelectSubset<T, FotoEvolucionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FotoEvolucionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FotoEvolucion.
+     * @param {FotoEvolucionUpsertArgs} args - Arguments to update or create a FotoEvolucion.
+     * @example
+     * // Update or create a FotoEvolucion
+     * const fotoEvolucion = await prisma.fotoEvolucion.upsert({
+     *   create: {
+     *     // ... data to create a FotoEvolucion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FotoEvolucion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FotoEvolucionUpsertArgs>(args: SelectSubset<T, FotoEvolucionUpsertArgs<ExtArgs>>): Prisma__FotoEvolucionClient<$Result.GetResult<Prisma.$FotoEvolucionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FotoEvolucions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FotoEvolucionCountArgs} args - Arguments to filter FotoEvolucions to count.
+     * @example
+     * // Count the number of FotoEvolucions
+     * const count = await prisma.fotoEvolucion.count({
+     *   where: {
+     *     // ... the filter for the FotoEvolucions we want to count
+     *   }
+     * })
+    **/
+    count<T extends FotoEvolucionCountArgs>(
+      args?: Subset<T, FotoEvolucionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FotoEvolucionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FotoEvolucion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FotoEvolucionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FotoEvolucionAggregateArgs>(args: Subset<T, FotoEvolucionAggregateArgs>): Prisma.PrismaPromise<GetFotoEvolucionAggregateType<T>>
+
+    /**
+     * Group by FotoEvolucion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FotoEvolucionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FotoEvolucionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FotoEvolucionGroupByArgs['orderBy'] }
+        : { orderBy?: FotoEvolucionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FotoEvolucionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFotoEvolucionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FotoEvolucion model
+   */
+  readonly fields: FotoEvolucionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FotoEvolucion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FotoEvolucionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    evolucion<T extends EvolucionRefraccionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EvolucionRefraccionDefaultArgs<ExtArgs>>): Prisma__EvolucionRefraccionClient<$Result.GetResult<Prisma.$EvolucionRefraccionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FotoEvolucion model
+   */
+  interface FotoEvolucionFieldRefs {
+    readonly id: FieldRef<"FotoEvolucion", 'Int'>
+    readonly evolucionId: FieldRef<"FotoEvolucion", 'Int'>
+    readonly foto: FieldRef<"FotoEvolucion", 'String'>
+    readonly observaciones: FieldRef<"FotoEvolucion", 'String'>
+    readonly createdAt: FieldRef<"FotoEvolucion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FotoEvolucion findUnique
+   */
+  export type FotoEvolucionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionInclude<ExtArgs> | null
+    /**
+     * Filter, which FotoEvolucion to fetch.
+     */
+    where: FotoEvolucionWhereUniqueInput
+  }
+
+  /**
+   * FotoEvolucion findUniqueOrThrow
+   */
+  export type FotoEvolucionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionInclude<ExtArgs> | null
+    /**
+     * Filter, which FotoEvolucion to fetch.
+     */
+    where: FotoEvolucionWhereUniqueInput
+  }
+
+  /**
+   * FotoEvolucion findFirst
+   */
+  export type FotoEvolucionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionInclude<ExtArgs> | null
+    /**
+     * Filter, which FotoEvolucion to fetch.
+     */
+    where?: FotoEvolucionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FotoEvolucions to fetch.
+     */
+    orderBy?: FotoEvolucionOrderByWithRelationInput | FotoEvolucionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FotoEvolucions.
+     */
+    cursor?: FotoEvolucionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FotoEvolucions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FotoEvolucions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FotoEvolucions.
+     */
+    distinct?: FotoEvolucionScalarFieldEnum | FotoEvolucionScalarFieldEnum[]
+  }
+
+  /**
+   * FotoEvolucion findFirstOrThrow
+   */
+  export type FotoEvolucionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionInclude<ExtArgs> | null
+    /**
+     * Filter, which FotoEvolucion to fetch.
+     */
+    where?: FotoEvolucionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FotoEvolucions to fetch.
+     */
+    orderBy?: FotoEvolucionOrderByWithRelationInput | FotoEvolucionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FotoEvolucions.
+     */
+    cursor?: FotoEvolucionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FotoEvolucions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FotoEvolucions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FotoEvolucions.
+     */
+    distinct?: FotoEvolucionScalarFieldEnum | FotoEvolucionScalarFieldEnum[]
+  }
+
+  /**
+   * FotoEvolucion findMany
+   */
+  export type FotoEvolucionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionInclude<ExtArgs> | null
+    /**
+     * Filter, which FotoEvolucions to fetch.
+     */
+    where?: FotoEvolucionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FotoEvolucions to fetch.
+     */
+    orderBy?: FotoEvolucionOrderByWithRelationInput | FotoEvolucionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FotoEvolucions.
+     */
+    cursor?: FotoEvolucionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FotoEvolucions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FotoEvolucions.
+     */
+    skip?: number
+    distinct?: FotoEvolucionScalarFieldEnum | FotoEvolucionScalarFieldEnum[]
+  }
+
+  /**
+   * FotoEvolucion create
+   */
+  export type FotoEvolucionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FotoEvolucion.
+     */
+    data: XOR<FotoEvolucionCreateInput, FotoEvolucionUncheckedCreateInput>
+  }
+
+  /**
+   * FotoEvolucion createMany
+   */
+  export type FotoEvolucionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FotoEvolucions.
+     */
+    data: FotoEvolucionCreateManyInput | FotoEvolucionCreateManyInput[]
+  }
+
+  /**
+   * FotoEvolucion createManyAndReturn
+   */
+  export type FotoEvolucionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * The data used to create many FotoEvolucions.
+     */
+    data: FotoEvolucionCreateManyInput | FotoEvolucionCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FotoEvolucion update
+   */
+  export type FotoEvolucionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FotoEvolucion.
+     */
+    data: XOR<FotoEvolucionUpdateInput, FotoEvolucionUncheckedUpdateInput>
+    /**
+     * Choose, which FotoEvolucion to update.
+     */
+    where: FotoEvolucionWhereUniqueInput
+  }
+
+  /**
+   * FotoEvolucion updateMany
+   */
+  export type FotoEvolucionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FotoEvolucions.
+     */
+    data: XOR<FotoEvolucionUpdateManyMutationInput, FotoEvolucionUncheckedUpdateManyInput>
+    /**
+     * Filter which FotoEvolucions to update
+     */
+    where?: FotoEvolucionWhereInput
+    /**
+     * Limit how many FotoEvolucions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FotoEvolucion updateManyAndReturn
+   */
+  export type FotoEvolucionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * The data used to update FotoEvolucions.
+     */
+    data: XOR<FotoEvolucionUpdateManyMutationInput, FotoEvolucionUncheckedUpdateManyInput>
+    /**
+     * Filter which FotoEvolucions to update
+     */
+    where?: FotoEvolucionWhereInput
+    /**
+     * Limit how many FotoEvolucions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FotoEvolucion upsert
+   */
+  export type FotoEvolucionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FotoEvolucion to update in case it exists.
+     */
+    where: FotoEvolucionWhereUniqueInput
+    /**
+     * In case the FotoEvolucion found by the `where` argument doesn't exist, create a new FotoEvolucion with this data.
+     */
+    create: XOR<FotoEvolucionCreateInput, FotoEvolucionUncheckedCreateInput>
+    /**
+     * In case the FotoEvolucion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FotoEvolucionUpdateInput, FotoEvolucionUncheckedUpdateInput>
+  }
+
+  /**
+   * FotoEvolucion delete
+   */
+  export type FotoEvolucionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionInclude<ExtArgs> | null
+    /**
+     * Filter which FotoEvolucion to delete.
+     */
+    where: FotoEvolucionWhereUniqueInput
+  }
+
+  /**
+   * FotoEvolucion deleteMany
+   */
+  export type FotoEvolucionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FotoEvolucions to delete
+     */
+    where?: FotoEvolucionWhereInput
+    /**
+     * Limit how many FotoEvolucions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FotoEvolucion without action
+   */
+  export type FotoEvolucionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FotoEvolucion
+     */
+    select?: FotoEvolucionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FotoEvolucion
+     */
+    omit?: FotoEvolucionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FotoEvolucionInclude<ExtArgs> | null
   }
 
 
@@ -22991,11 +24289,26 @@ export namespace Prisma {
     tratamiento: 'tratamiento',
     formato: 'formato',
     dip: 'dip',
+    montaje: 'montaje',
+    doctor: 'doctor',
+    patologia: 'patologia',
+    obs: 'obs',
     createdAt: 'createdAt',
     deletedAt: 'deletedAt'
   };
 
   export type EvolucionRefraccionScalarFieldEnum = (typeof EvolucionRefraccionScalarFieldEnum)[keyof typeof EvolucionRefraccionScalarFieldEnum]
+
+
+  export const FotoEvolucionScalarFieldEnum: {
+    id: 'id',
+    evolucionId: 'evolucionId',
+    foto: 'foto',
+    observaciones: 'observaciones',
+    createdAt: 'createdAt'
+  };
+
+  export type FotoEvolucionScalarFieldEnum = (typeof FotoEvolucionScalarFieldEnum)[keyof typeof FotoEvolucionScalarFieldEnum]
 
 
   export const ServicioOpticaScalarFieldEnum: {
@@ -23816,8 +25129,13 @@ export namespace Prisma {
     tratamiento?: StringNullableFilter<"EvolucionRefraccion"> | string | null
     formato?: StringNullableFilter<"EvolucionRefraccion"> | string | null
     dip?: FloatNullableFilter<"EvolucionRefraccion"> | number | null
+    montaje?: StringNullableFilter<"EvolucionRefraccion"> | string | null
+    doctor?: StringNullableFilter<"EvolucionRefraccion"> | string | null
+    patologia?: StringNullableFilter<"EvolucionRefraccion"> | string | null
+    obs?: StringNullableFilter<"EvolucionRefraccion"> | string | null
     createdAt?: DateTimeFilter<"EvolucionRefraccion"> | Date | string
     deletedAt?: DateTimeNullableFilter<"EvolucionRefraccion"> | Date | string | null
+    fotos?: FotoEvolucionListRelationFilter
     paciente?: XOR<PacienteScalarRelationFilter, PacienteWhereInput>
   }
 
@@ -23835,8 +25153,13 @@ export namespace Prisma {
     tratamiento?: SortOrderInput | SortOrder
     formato?: SortOrderInput | SortOrder
     dip?: SortOrderInput | SortOrder
+    montaje?: SortOrderInput | SortOrder
+    doctor?: SortOrderInput | SortOrder
+    patologia?: SortOrderInput | SortOrder
+    obs?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
+    fotos?: FotoEvolucionOrderByRelationAggregateInput
     paciente?: PacienteOrderByWithRelationInput
   }
 
@@ -23857,8 +25180,13 @@ export namespace Prisma {
     tratamiento?: StringNullableFilter<"EvolucionRefraccion"> | string | null
     formato?: StringNullableFilter<"EvolucionRefraccion"> | string | null
     dip?: FloatNullableFilter<"EvolucionRefraccion"> | number | null
+    montaje?: StringNullableFilter<"EvolucionRefraccion"> | string | null
+    doctor?: StringNullableFilter<"EvolucionRefraccion"> | string | null
+    patologia?: StringNullableFilter<"EvolucionRefraccion"> | string | null
+    obs?: StringNullableFilter<"EvolucionRefraccion"> | string | null
     createdAt?: DateTimeFilter<"EvolucionRefraccion"> | Date | string
     deletedAt?: DateTimeNullableFilter<"EvolucionRefraccion"> | Date | string | null
+    fotos?: FotoEvolucionListRelationFilter
     paciente?: XOR<PacienteScalarRelationFilter, PacienteWhereInput>
   }, "id">
 
@@ -23876,6 +25204,10 @@ export namespace Prisma {
     tratamiento?: SortOrderInput | SortOrder
     formato?: SortOrderInput | SortOrder
     dip?: SortOrderInput | SortOrder
+    montaje?: SortOrderInput | SortOrder
+    doctor?: SortOrderInput | SortOrder
+    patologia?: SortOrderInput | SortOrder
+    obs?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrderInput | SortOrder
     _count?: EvolucionRefraccionCountOrderByAggregateInput
@@ -23902,8 +25234,69 @@ export namespace Prisma {
     tratamiento?: StringNullableWithAggregatesFilter<"EvolucionRefraccion"> | string | null
     formato?: StringNullableWithAggregatesFilter<"EvolucionRefraccion"> | string | null
     dip?: FloatNullableWithAggregatesFilter<"EvolucionRefraccion"> | number | null
+    montaje?: StringNullableWithAggregatesFilter<"EvolucionRefraccion"> | string | null
+    doctor?: StringNullableWithAggregatesFilter<"EvolucionRefraccion"> | string | null
+    patologia?: StringNullableWithAggregatesFilter<"EvolucionRefraccion"> | string | null
+    obs?: StringNullableWithAggregatesFilter<"EvolucionRefraccion"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"EvolucionRefraccion"> | Date | string
     deletedAt?: DateTimeNullableWithAggregatesFilter<"EvolucionRefraccion"> | Date | string | null
+  }
+
+  export type FotoEvolucionWhereInput = {
+    AND?: FotoEvolucionWhereInput | FotoEvolucionWhereInput[]
+    OR?: FotoEvolucionWhereInput[]
+    NOT?: FotoEvolucionWhereInput | FotoEvolucionWhereInput[]
+    id?: IntFilter<"FotoEvolucion"> | number
+    evolucionId?: IntFilter<"FotoEvolucion"> | number
+    foto?: StringFilter<"FotoEvolucion"> | string
+    observaciones?: StringFilter<"FotoEvolucion"> | string
+    createdAt?: DateTimeFilter<"FotoEvolucion"> | Date | string
+    evolucion?: XOR<EvolucionRefraccionScalarRelationFilter, EvolucionRefraccionWhereInput>
+  }
+
+  export type FotoEvolucionOrderByWithRelationInput = {
+    id?: SortOrder
+    evolucionId?: SortOrder
+    foto?: SortOrder
+    observaciones?: SortOrder
+    createdAt?: SortOrder
+    evolucion?: EvolucionRefraccionOrderByWithRelationInput
+  }
+
+  export type FotoEvolucionWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: FotoEvolucionWhereInput | FotoEvolucionWhereInput[]
+    OR?: FotoEvolucionWhereInput[]
+    NOT?: FotoEvolucionWhereInput | FotoEvolucionWhereInput[]
+    evolucionId?: IntFilter<"FotoEvolucion"> | number
+    foto?: StringFilter<"FotoEvolucion"> | string
+    observaciones?: StringFilter<"FotoEvolucion"> | string
+    createdAt?: DateTimeFilter<"FotoEvolucion"> | Date | string
+    evolucion?: XOR<EvolucionRefraccionScalarRelationFilter, EvolucionRefraccionWhereInput>
+  }, "id">
+
+  export type FotoEvolucionOrderByWithAggregationInput = {
+    id?: SortOrder
+    evolucionId?: SortOrder
+    foto?: SortOrder
+    observaciones?: SortOrder
+    createdAt?: SortOrder
+    _count?: FotoEvolucionCountOrderByAggregateInput
+    _avg?: FotoEvolucionAvgOrderByAggregateInput
+    _max?: FotoEvolucionMaxOrderByAggregateInput
+    _min?: FotoEvolucionMinOrderByAggregateInput
+    _sum?: FotoEvolucionSumOrderByAggregateInput
+  }
+
+  export type FotoEvolucionScalarWhereWithAggregatesInput = {
+    AND?: FotoEvolucionScalarWhereWithAggregatesInput | FotoEvolucionScalarWhereWithAggregatesInput[]
+    OR?: FotoEvolucionScalarWhereWithAggregatesInput[]
+    NOT?: FotoEvolucionScalarWhereWithAggregatesInput | FotoEvolucionScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"FotoEvolucion"> | number
+    evolucionId?: IntWithAggregatesFilter<"FotoEvolucion"> | number
+    foto?: StringWithAggregatesFilter<"FotoEvolucion"> | string
+    observaciones?: StringWithAggregatesFilter<"FotoEvolucion"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"FotoEvolucion"> | Date | string
   }
 
   export type ServicioOpticaWhereInput = {
@@ -25422,8 +26815,13 @@ export namespace Prisma {
     tratamiento?: string | null
     formato?: string | null
     dip?: number | null
+    montaje?: string | null
+    doctor?: string | null
+    patologia?: string | null
+    obs?: string | null
     createdAt?: Date | string
     deletedAt?: Date | string | null
+    fotos?: FotoEvolucionCreateNestedManyWithoutEvolucionInput
     paciente: PacienteCreateNestedOneWithoutEvolucionesInput
   }
 
@@ -25441,8 +26839,13 @@ export namespace Prisma {
     tratamiento?: string | null
     formato?: string | null
     dip?: number | null
+    montaje?: string | null
+    doctor?: string | null
+    patologia?: string | null
+    obs?: string | null
     createdAt?: Date | string
     deletedAt?: Date | string | null
+    fotos?: FotoEvolucionUncheckedCreateNestedManyWithoutEvolucionInput
   }
 
   export type EvolucionRefraccionUpdateInput = {
@@ -25457,8 +26860,13 @@ export namespace Prisma {
     tratamiento?: NullableStringFieldUpdateOperationsInput | string | null
     formato?: NullableStringFieldUpdateOperationsInput | string | null
     dip?: NullableFloatFieldUpdateOperationsInput | number | null
+    montaje?: NullableStringFieldUpdateOperationsInput | string | null
+    doctor?: NullableStringFieldUpdateOperationsInput | string | null
+    patologia?: NullableStringFieldUpdateOperationsInput | string | null
+    obs?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fotos?: FotoEvolucionUpdateManyWithoutEvolucionNestedInput
     paciente?: PacienteUpdateOneRequiredWithoutEvolucionesNestedInput
   }
 
@@ -25476,8 +26884,13 @@ export namespace Prisma {
     tratamiento?: NullableStringFieldUpdateOperationsInput | string | null
     formato?: NullableStringFieldUpdateOperationsInput | string | null
     dip?: NullableFloatFieldUpdateOperationsInput | number | null
+    montaje?: NullableStringFieldUpdateOperationsInput | string | null
+    doctor?: NullableStringFieldUpdateOperationsInput | string | null
+    patologia?: NullableStringFieldUpdateOperationsInput | string | null
+    obs?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fotos?: FotoEvolucionUncheckedUpdateManyWithoutEvolucionNestedInput
   }
 
   export type EvolucionRefraccionCreateManyInput = {
@@ -25494,6 +26907,10 @@ export namespace Prisma {
     tratamiento?: string | null
     formato?: string | null
     dip?: number | null
+    montaje?: string | null
+    doctor?: string | null
+    patologia?: string | null
+    obs?: string | null
     createdAt?: Date | string
     deletedAt?: Date | string | null
   }
@@ -25510,6 +26927,10 @@ export namespace Prisma {
     tratamiento?: NullableStringFieldUpdateOperationsInput | string | null
     formato?: NullableStringFieldUpdateOperationsInput | string | null
     dip?: NullableFloatFieldUpdateOperationsInput | number | null
+    montaje?: NullableStringFieldUpdateOperationsInput | string | null
+    doctor?: NullableStringFieldUpdateOperationsInput | string | null
+    patologia?: NullableStringFieldUpdateOperationsInput | string | null
+    obs?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -25528,8 +26949,64 @@ export namespace Prisma {
     tratamiento?: NullableStringFieldUpdateOperationsInput | string | null
     formato?: NullableStringFieldUpdateOperationsInput | string | null
     dip?: NullableFloatFieldUpdateOperationsInput | number | null
+    montaje?: NullableStringFieldUpdateOperationsInput | string | null
+    doctor?: NullableStringFieldUpdateOperationsInput | string | null
+    patologia?: NullableStringFieldUpdateOperationsInput | string | null
+    obs?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type FotoEvolucionCreateInput = {
+    foto: string
+    observaciones?: string
+    createdAt?: Date | string
+    evolucion: EvolucionRefraccionCreateNestedOneWithoutFotosInput
+  }
+
+  export type FotoEvolucionUncheckedCreateInput = {
+    id?: number
+    evolucionId: number
+    foto: string
+    observaciones?: string
+    createdAt?: Date | string
+  }
+
+  export type FotoEvolucionUpdateInput = {
+    foto?: StringFieldUpdateOperationsInput | string
+    observaciones?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    evolucion?: EvolucionRefraccionUpdateOneRequiredWithoutFotosNestedInput
+  }
+
+  export type FotoEvolucionUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    evolucionId?: IntFieldUpdateOperationsInput | number
+    foto?: StringFieldUpdateOperationsInput | string
+    observaciones?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FotoEvolucionCreateManyInput = {
+    id?: number
+    evolucionId: number
+    foto: string
+    observaciones?: string
+    createdAt?: Date | string
+  }
+
+  export type FotoEvolucionUpdateManyMutationInput = {
+    foto?: StringFieldUpdateOperationsInput | string
+    observaciones?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FotoEvolucionUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    evolucionId?: IntFieldUpdateOperationsInput | number
+    foto?: StringFieldUpdateOperationsInput | string
+    observaciones?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ServicioOpticaCreateInput = {
@@ -27116,6 +28593,16 @@ export namespace Prisma {
     recetaId?: SortOrder
   }
 
+  export type FotoEvolucionListRelationFilter = {
+    every?: FotoEvolucionWhereInput
+    some?: FotoEvolucionWhereInput
+    none?: FotoEvolucionWhereInput
+  }
+
+  export type FotoEvolucionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type EvolucionRefraccionCountOrderByAggregateInput = {
     id?: SortOrder
     pacienteId?: SortOrder
@@ -27130,6 +28617,10 @@ export namespace Prisma {
     tratamiento?: SortOrder
     formato?: SortOrder
     dip?: SortOrder
+    montaje?: SortOrder
+    doctor?: SortOrder
+    patologia?: SortOrder
+    obs?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrder
   }
@@ -27160,6 +28651,10 @@ export namespace Prisma {
     tratamiento?: SortOrder
     formato?: SortOrder
     dip?: SortOrder
+    montaje?: SortOrder
+    doctor?: SortOrder
+    patologia?: SortOrder
+    obs?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrder
   }
@@ -27178,6 +28673,10 @@ export namespace Prisma {
     tratamiento?: SortOrder
     formato?: SortOrder
     dip?: SortOrder
+    montaje?: SortOrder
+    doctor?: SortOrder
+    patologia?: SortOrder
+    obs?: SortOrder
     createdAt?: SortOrder
     deletedAt?: SortOrder
   }
@@ -27192,6 +28691,45 @@ export namespace Prisma {
     oiCil?: SortOrder
     oiEje?: SortOrder
     dip?: SortOrder
+  }
+
+  export type EvolucionRefraccionScalarRelationFilter = {
+    is?: EvolucionRefraccionWhereInput
+    isNot?: EvolucionRefraccionWhereInput
+  }
+
+  export type FotoEvolucionCountOrderByAggregateInput = {
+    id?: SortOrder
+    evolucionId?: SortOrder
+    foto?: SortOrder
+    observaciones?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FotoEvolucionAvgOrderByAggregateInput = {
+    id?: SortOrder
+    evolucionId?: SortOrder
+  }
+
+  export type FotoEvolucionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    evolucionId?: SortOrder
+    foto?: SortOrder
+    observaciones?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FotoEvolucionMinOrderByAggregateInput = {
+    id?: SortOrder
+    evolucionId?: SortOrder
+    foto?: SortOrder
+    observaciones?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FotoEvolucionSumOrderByAggregateInput = {
+    id?: SortOrder
+    evolucionId?: SortOrder
   }
 
   export type ServicioOpticaCountOrderByAggregateInput = {
@@ -28158,10 +29696,38 @@ export namespace Prisma {
     update?: XOR<XOR<RecetaUpdateToOneWithWhereWithoutFotosInput, RecetaUpdateWithoutFotosInput>, RecetaUncheckedUpdateWithoutFotosInput>
   }
 
+  export type FotoEvolucionCreateNestedManyWithoutEvolucionInput = {
+    create?: XOR<FotoEvolucionCreateWithoutEvolucionInput, FotoEvolucionUncheckedCreateWithoutEvolucionInput> | FotoEvolucionCreateWithoutEvolucionInput[] | FotoEvolucionUncheckedCreateWithoutEvolucionInput[]
+    connectOrCreate?: FotoEvolucionCreateOrConnectWithoutEvolucionInput | FotoEvolucionCreateOrConnectWithoutEvolucionInput[]
+    createMany?: FotoEvolucionCreateManyEvolucionInputEnvelope
+    connect?: FotoEvolucionWhereUniqueInput | FotoEvolucionWhereUniqueInput[]
+  }
+
   export type PacienteCreateNestedOneWithoutEvolucionesInput = {
     create?: XOR<PacienteCreateWithoutEvolucionesInput, PacienteUncheckedCreateWithoutEvolucionesInput>
     connectOrCreate?: PacienteCreateOrConnectWithoutEvolucionesInput
     connect?: PacienteWhereUniqueInput
+  }
+
+  export type FotoEvolucionUncheckedCreateNestedManyWithoutEvolucionInput = {
+    create?: XOR<FotoEvolucionCreateWithoutEvolucionInput, FotoEvolucionUncheckedCreateWithoutEvolucionInput> | FotoEvolucionCreateWithoutEvolucionInput[] | FotoEvolucionUncheckedCreateWithoutEvolucionInput[]
+    connectOrCreate?: FotoEvolucionCreateOrConnectWithoutEvolucionInput | FotoEvolucionCreateOrConnectWithoutEvolucionInput[]
+    createMany?: FotoEvolucionCreateManyEvolucionInputEnvelope
+    connect?: FotoEvolucionWhereUniqueInput | FotoEvolucionWhereUniqueInput[]
+  }
+
+  export type FotoEvolucionUpdateManyWithoutEvolucionNestedInput = {
+    create?: XOR<FotoEvolucionCreateWithoutEvolucionInput, FotoEvolucionUncheckedCreateWithoutEvolucionInput> | FotoEvolucionCreateWithoutEvolucionInput[] | FotoEvolucionUncheckedCreateWithoutEvolucionInput[]
+    connectOrCreate?: FotoEvolucionCreateOrConnectWithoutEvolucionInput | FotoEvolucionCreateOrConnectWithoutEvolucionInput[]
+    upsert?: FotoEvolucionUpsertWithWhereUniqueWithoutEvolucionInput | FotoEvolucionUpsertWithWhereUniqueWithoutEvolucionInput[]
+    createMany?: FotoEvolucionCreateManyEvolucionInputEnvelope
+    set?: FotoEvolucionWhereUniqueInput | FotoEvolucionWhereUniqueInput[]
+    disconnect?: FotoEvolucionWhereUniqueInput | FotoEvolucionWhereUniqueInput[]
+    delete?: FotoEvolucionWhereUniqueInput | FotoEvolucionWhereUniqueInput[]
+    connect?: FotoEvolucionWhereUniqueInput | FotoEvolucionWhereUniqueInput[]
+    update?: FotoEvolucionUpdateWithWhereUniqueWithoutEvolucionInput | FotoEvolucionUpdateWithWhereUniqueWithoutEvolucionInput[]
+    updateMany?: FotoEvolucionUpdateManyWithWhereWithoutEvolucionInput | FotoEvolucionUpdateManyWithWhereWithoutEvolucionInput[]
+    deleteMany?: FotoEvolucionScalarWhereInput | FotoEvolucionScalarWhereInput[]
   }
 
   export type PacienteUpdateOneRequiredWithoutEvolucionesNestedInput = {
@@ -28170,6 +29736,34 @@ export namespace Prisma {
     upsert?: PacienteUpsertWithoutEvolucionesInput
     connect?: PacienteWhereUniqueInput
     update?: XOR<XOR<PacienteUpdateToOneWithWhereWithoutEvolucionesInput, PacienteUpdateWithoutEvolucionesInput>, PacienteUncheckedUpdateWithoutEvolucionesInput>
+  }
+
+  export type FotoEvolucionUncheckedUpdateManyWithoutEvolucionNestedInput = {
+    create?: XOR<FotoEvolucionCreateWithoutEvolucionInput, FotoEvolucionUncheckedCreateWithoutEvolucionInput> | FotoEvolucionCreateWithoutEvolucionInput[] | FotoEvolucionUncheckedCreateWithoutEvolucionInput[]
+    connectOrCreate?: FotoEvolucionCreateOrConnectWithoutEvolucionInput | FotoEvolucionCreateOrConnectWithoutEvolucionInput[]
+    upsert?: FotoEvolucionUpsertWithWhereUniqueWithoutEvolucionInput | FotoEvolucionUpsertWithWhereUniqueWithoutEvolucionInput[]
+    createMany?: FotoEvolucionCreateManyEvolucionInputEnvelope
+    set?: FotoEvolucionWhereUniqueInput | FotoEvolucionWhereUniqueInput[]
+    disconnect?: FotoEvolucionWhereUniqueInput | FotoEvolucionWhereUniqueInput[]
+    delete?: FotoEvolucionWhereUniqueInput | FotoEvolucionWhereUniqueInput[]
+    connect?: FotoEvolucionWhereUniqueInput | FotoEvolucionWhereUniqueInput[]
+    update?: FotoEvolucionUpdateWithWhereUniqueWithoutEvolucionInput | FotoEvolucionUpdateWithWhereUniqueWithoutEvolucionInput[]
+    updateMany?: FotoEvolucionUpdateManyWithWhereWithoutEvolucionInput | FotoEvolucionUpdateManyWithWhereWithoutEvolucionInput[]
+    deleteMany?: FotoEvolucionScalarWhereInput | FotoEvolucionScalarWhereInput[]
+  }
+
+  export type EvolucionRefraccionCreateNestedOneWithoutFotosInput = {
+    create?: XOR<EvolucionRefraccionCreateWithoutFotosInput, EvolucionRefraccionUncheckedCreateWithoutFotosInput>
+    connectOrCreate?: EvolucionRefraccionCreateOrConnectWithoutFotosInput
+    connect?: EvolucionRefraccionWhereUniqueInput
+  }
+
+  export type EvolucionRefraccionUpdateOneRequiredWithoutFotosNestedInput = {
+    create?: XOR<EvolucionRefraccionCreateWithoutFotosInput, EvolucionRefraccionUncheckedCreateWithoutFotosInput>
+    connectOrCreate?: EvolucionRefraccionCreateOrConnectWithoutFotosInput
+    upsert?: EvolucionRefraccionUpsertWithoutFotosInput
+    connect?: EvolucionRefraccionWhereUniqueInput
+    update?: XOR<XOR<EvolucionRefraccionUpdateToOneWithWhereWithoutFotosInput, EvolucionRefraccionUpdateWithoutFotosInput>, EvolucionRefraccionUncheckedUpdateWithoutFotosInput>
   }
 
   export type MovimientoProveedorCreateNestedManyWithoutProveedorInput = {
@@ -28682,8 +30276,13 @@ export namespace Prisma {
     tratamiento?: string | null
     formato?: string | null
     dip?: number | null
+    montaje?: string | null
+    doctor?: string | null
+    patologia?: string | null
+    obs?: string | null
     createdAt?: Date | string
     deletedAt?: Date | string | null
+    fotos?: FotoEvolucionCreateNestedManyWithoutEvolucionInput
   }
 
   export type EvolucionRefraccionUncheckedCreateWithoutPacienteInput = {
@@ -28699,8 +30298,13 @@ export namespace Prisma {
     tratamiento?: string | null
     formato?: string | null
     dip?: number | null
+    montaje?: string | null
+    doctor?: string | null
+    patologia?: string | null
+    obs?: string | null
     createdAt?: Date | string
     deletedAt?: Date | string | null
+    fotos?: FotoEvolucionUncheckedCreateNestedManyWithoutEvolucionInput
   }
 
   export type EvolucionRefraccionCreateOrConnectWithoutPacienteInput = {
@@ -28881,6 +30485,10 @@ export namespace Prisma {
     tratamiento?: StringNullableFilter<"EvolucionRefraccion"> | string | null
     formato?: StringNullableFilter<"EvolucionRefraccion"> | string | null
     dip?: FloatNullableFilter<"EvolucionRefraccion"> | number | null
+    montaje?: StringNullableFilter<"EvolucionRefraccion"> | string | null
+    doctor?: StringNullableFilter<"EvolucionRefraccion"> | string | null
+    patologia?: StringNullableFilter<"EvolucionRefraccion"> | string | null
+    obs?: StringNullableFilter<"EvolucionRefraccion"> | string | null
     createdAt?: DateTimeFilter<"EvolucionRefraccion"> | Date | string
     deletedAt?: DateTimeNullableFilter<"EvolucionRefraccion"> | Date | string | null
   }
@@ -29677,6 +31285,28 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type FotoEvolucionCreateWithoutEvolucionInput = {
+    foto: string
+    observaciones?: string
+    createdAt?: Date | string
+  }
+
+  export type FotoEvolucionUncheckedCreateWithoutEvolucionInput = {
+    id?: number
+    foto: string
+    observaciones?: string
+    createdAt?: Date | string
+  }
+
+  export type FotoEvolucionCreateOrConnectWithoutEvolucionInput = {
+    where: FotoEvolucionWhereUniqueInput
+    create: XOR<FotoEvolucionCreateWithoutEvolucionInput, FotoEvolucionUncheckedCreateWithoutEvolucionInput>
+  }
+
+  export type FotoEvolucionCreateManyEvolucionInputEnvelope = {
+    data: FotoEvolucionCreateManyEvolucionInput | FotoEvolucionCreateManyEvolucionInput[]
+  }
+
   export type PacienteCreateWithoutEvolucionesInput = {
     nombre: string
     dni: string
@@ -29707,6 +31337,33 @@ export namespace Prisma {
   export type PacienteCreateOrConnectWithoutEvolucionesInput = {
     where: PacienteWhereUniqueInput
     create: XOR<PacienteCreateWithoutEvolucionesInput, PacienteUncheckedCreateWithoutEvolucionesInput>
+  }
+
+  export type FotoEvolucionUpsertWithWhereUniqueWithoutEvolucionInput = {
+    where: FotoEvolucionWhereUniqueInput
+    update: XOR<FotoEvolucionUpdateWithoutEvolucionInput, FotoEvolucionUncheckedUpdateWithoutEvolucionInput>
+    create: XOR<FotoEvolucionCreateWithoutEvolucionInput, FotoEvolucionUncheckedCreateWithoutEvolucionInput>
+  }
+
+  export type FotoEvolucionUpdateWithWhereUniqueWithoutEvolucionInput = {
+    where: FotoEvolucionWhereUniqueInput
+    data: XOR<FotoEvolucionUpdateWithoutEvolucionInput, FotoEvolucionUncheckedUpdateWithoutEvolucionInput>
+  }
+
+  export type FotoEvolucionUpdateManyWithWhereWithoutEvolucionInput = {
+    where: FotoEvolucionScalarWhereInput
+    data: XOR<FotoEvolucionUpdateManyMutationInput, FotoEvolucionUncheckedUpdateManyWithoutEvolucionInput>
+  }
+
+  export type FotoEvolucionScalarWhereInput = {
+    AND?: FotoEvolucionScalarWhereInput | FotoEvolucionScalarWhereInput[]
+    OR?: FotoEvolucionScalarWhereInput[]
+    NOT?: FotoEvolucionScalarWhereInput | FotoEvolucionScalarWhereInput[]
+    id?: IntFilter<"FotoEvolucion"> | number
+    evolucionId?: IntFilter<"FotoEvolucion"> | number
+    foto?: StringFilter<"FotoEvolucion"> | string
+    observaciones?: StringFilter<"FotoEvolucion"> | string
+    createdAt?: DateTimeFilter<"FotoEvolucion"> | Date | string
   }
 
   export type PacienteUpsertWithoutEvolucionesInput = {
@@ -29745,6 +31402,108 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recetas?: RecetaUncheckedUpdateManyWithoutPacienteNestedInput
     turnos?: TurnoUncheckedUpdateManyWithoutPacienteNestedInput
+  }
+
+  export type EvolucionRefraccionCreateWithoutFotosInput = {
+    fecha?: Date | string
+    distancia?: string | null
+    odEsf?: number | null
+    odCil?: number | null
+    odEje?: number | null
+    oiEsf?: number | null
+    oiCil?: number | null
+    oiEje?: number | null
+    tratamiento?: string | null
+    formato?: string | null
+    dip?: number | null
+    montaje?: string | null
+    doctor?: string | null
+    patologia?: string | null
+    obs?: string | null
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+    paciente: PacienteCreateNestedOneWithoutEvolucionesInput
+  }
+
+  export type EvolucionRefraccionUncheckedCreateWithoutFotosInput = {
+    id?: number
+    pacienteId: number
+    fecha?: Date | string
+    distancia?: string | null
+    odEsf?: number | null
+    odCil?: number | null
+    odEje?: number | null
+    oiEsf?: number | null
+    oiCil?: number | null
+    oiEje?: number | null
+    tratamiento?: string | null
+    formato?: string | null
+    dip?: number | null
+    montaje?: string | null
+    doctor?: string | null
+    patologia?: string | null
+    obs?: string | null
+    createdAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type EvolucionRefraccionCreateOrConnectWithoutFotosInput = {
+    where: EvolucionRefraccionWhereUniqueInput
+    create: XOR<EvolucionRefraccionCreateWithoutFotosInput, EvolucionRefraccionUncheckedCreateWithoutFotosInput>
+  }
+
+  export type EvolucionRefraccionUpsertWithoutFotosInput = {
+    update: XOR<EvolucionRefraccionUpdateWithoutFotosInput, EvolucionRefraccionUncheckedUpdateWithoutFotosInput>
+    create: XOR<EvolucionRefraccionCreateWithoutFotosInput, EvolucionRefraccionUncheckedCreateWithoutFotosInput>
+    where?: EvolucionRefraccionWhereInput
+  }
+
+  export type EvolucionRefraccionUpdateToOneWithWhereWithoutFotosInput = {
+    where?: EvolucionRefraccionWhereInput
+    data: XOR<EvolucionRefraccionUpdateWithoutFotosInput, EvolucionRefraccionUncheckedUpdateWithoutFotosInput>
+  }
+
+  export type EvolucionRefraccionUpdateWithoutFotosInput = {
+    fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    distancia?: NullableStringFieldUpdateOperationsInput | string | null
+    odEsf?: NullableFloatFieldUpdateOperationsInput | number | null
+    odCil?: NullableFloatFieldUpdateOperationsInput | number | null
+    odEje?: NullableIntFieldUpdateOperationsInput | number | null
+    oiEsf?: NullableFloatFieldUpdateOperationsInput | number | null
+    oiCil?: NullableFloatFieldUpdateOperationsInput | number | null
+    oiEje?: NullableIntFieldUpdateOperationsInput | number | null
+    tratamiento?: NullableStringFieldUpdateOperationsInput | string | null
+    formato?: NullableStringFieldUpdateOperationsInput | string | null
+    dip?: NullableFloatFieldUpdateOperationsInput | number | null
+    montaje?: NullableStringFieldUpdateOperationsInput | string | null
+    doctor?: NullableStringFieldUpdateOperationsInput | string | null
+    patologia?: NullableStringFieldUpdateOperationsInput | string | null
+    obs?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paciente?: PacienteUpdateOneRequiredWithoutEvolucionesNestedInput
+  }
+
+  export type EvolucionRefraccionUncheckedUpdateWithoutFotosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    pacienteId?: IntFieldUpdateOperationsInput | number
+    fecha?: DateTimeFieldUpdateOperationsInput | Date | string
+    distancia?: NullableStringFieldUpdateOperationsInput | string | null
+    odEsf?: NullableFloatFieldUpdateOperationsInput | number | null
+    odCil?: NullableFloatFieldUpdateOperationsInput | number | null
+    odEje?: NullableIntFieldUpdateOperationsInput | number | null
+    oiEsf?: NullableFloatFieldUpdateOperationsInput | number | null
+    oiCil?: NullableFloatFieldUpdateOperationsInput | number | null
+    oiEje?: NullableIntFieldUpdateOperationsInput | number | null
+    tratamiento?: NullableStringFieldUpdateOperationsInput | string | null
+    formato?: NullableStringFieldUpdateOperationsInput | string | null
+    dip?: NullableFloatFieldUpdateOperationsInput | number | null
+    montaje?: NullableStringFieldUpdateOperationsInput | string | null
+    doctor?: NullableStringFieldUpdateOperationsInput | string | null
+    patologia?: NullableStringFieldUpdateOperationsInput | string | null
+    obs?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type MovimientoProveedorCreateWithoutProveedorInput = {
@@ -30324,6 +32083,10 @@ export namespace Prisma {
     tratamiento?: string | null
     formato?: string | null
     dip?: number | null
+    montaje?: string | null
+    doctor?: string | null
+    patologia?: string | null
+    obs?: string | null
     createdAt?: Date | string
     deletedAt?: Date | string | null
   }
@@ -30399,8 +32162,13 @@ export namespace Prisma {
     tratamiento?: NullableStringFieldUpdateOperationsInput | string | null
     formato?: NullableStringFieldUpdateOperationsInput | string | null
     dip?: NullableFloatFieldUpdateOperationsInput | number | null
+    montaje?: NullableStringFieldUpdateOperationsInput | string | null
+    doctor?: NullableStringFieldUpdateOperationsInput | string | null
+    patologia?: NullableStringFieldUpdateOperationsInput | string | null
+    obs?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fotos?: FotoEvolucionUpdateManyWithoutEvolucionNestedInput
   }
 
   export type EvolucionRefraccionUncheckedUpdateWithoutPacienteInput = {
@@ -30416,8 +32184,13 @@ export namespace Prisma {
     tratamiento?: NullableStringFieldUpdateOperationsInput | string | null
     formato?: NullableStringFieldUpdateOperationsInput | string | null
     dip?: NullableFloatFieldUpdateOperationsInput | number | null
+    montaje?: NullableStringFieldUpdateOperationsInput | string | null
+    doctor?: NullableStringFieldUpdateOperationsInput | string | null
+    patologia?: NullableStringFieldUpdateOperationsInput | string | null
+    obs?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    fotos?: FotoEvolucionUncheckedUpdateManyWithoutEvolucionNestedInput
   }
 
   export type EvolucionRefraccionUncheckedUpdateManyWithoutPacienteInput = {
@@ -30433,6 +32206,10 @@ export namespace Prisma {
     tratamiento?: NullableStringFieldUpdateOperationsInput | string | null
     formato?: NullableStringFieldUpdateOperationsInput | string | null
     dip?: NullableFloatFieldUpdateOperationsInput | number | null
+    montaje?: NullableStringFieldUpdateOperationsInput | string | null
+    doctor?: NullableStringFieldUpdateOperationsInput | string | null
+    patologia?: NullableStringFieldUpdateOperationsInput | string | null
+    obs?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -31005,6 +32782,33 @@ export namespace Prisma {
   }
 
   export type FotoRecetaUncheckedUpdateManyWithoutRecetaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    foto?: StringFieldUpdateOperationsInput | string
+    observaciones?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FotoEvolucionCreateManyEvolucionInput = {
+    id?: number
+    foto: string
+    observaciones?: string
+    createdAt?: Date | string
+  }
+
+  export type FotoEvolucionUpdateWithoutEvolucionInput = {
+    foto?: StringFieldUpdateOperationsInput | string
+    observaciones?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FotoEvolucionUncheckedUpdateWithoutEvolucionInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    foto?: StringFieldUpdateOperationsInput | string
+    observaciones?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FotoEvolucionUncheckedUpdateManyWithoutEvolucionInput = {
     id?: IntFieldUpdateOperationsInput | number
     foto?: StringFieldUpdateOperationsInput | string
     observaciones?: StringFieldUpdateOperationsInput | string

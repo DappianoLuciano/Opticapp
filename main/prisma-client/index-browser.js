@@ -225,8 +225,20 @@ exports.Prisma.EvolucionRefraccionScalarFieldEnum = {
   tratamiento: 'tratamiento',
   formato: 'formato',
   dip: 'dip',
+  montaje: 'montaje',
+  doctor: 'doctor',
+  patologia: 'patologia',
+  obs: 'obs',
   createdAt: 'createdAt',
   deletedAt: 'deletedAt'
+};
+
+exports.Prisma.FotoEvolucionScalarFieldEnum = {
+  id: 'id',
+  evolucionId: 'evolucionId',
+  foto: 'foto',
+  observaciones: 'observaciones',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.ServicioOpticaScalarFieldEnum = {
@@ -382,6 +394,7 @@ exports.Prisma.ModelName = {
   Receta: 'Receta',
   FotoReceta: 'FotoReceta',
   EvolucionRefraccion: 'EvolucionRefraccion',
+  FotoEvolucion: 'FotoEvolucion',
   ServicioOptica: 'ServicioOptica',
   Configuracion: 'Configuracion',
   Proveedor: 'Proveedor',

@@ -99,45 +99,71 @@ function registerPacientes() {
     return prisma.evolucionRefraccion.findMany({
       where: { pacienteId: pid, deletedAt: null },
       orderBy: { fecha: "desc" },
+      include: { fotos: true },
     });
   });
 
   safeHandle("patients:evoluciones:add", async (_evt, payload) => {
+    const fotos = Array.isArray(payload.fotos) ? payload.fotos : [];
     return prisma.evolucionRefraccion.create({
       data: {
         pacienteId:  Number(payload.pacienteId),
         fecha:       payload.fecha ? new Date(payload.fecha + "T00:00:00") : new Date(),
         distancia:   payload.distancia   ?? null,
-        odEsf:       payload.odEsf === "" ? null : Number(payload.odEsf),
-        odCil:       payload.odCil === "" ? null : Number(payload.odCil),
-        odEje:       payload.odEje === "" ? null : Number(payload.odEje),
-        oiEsf:       payload.oiEsf === "" ? null : Number(payload.oiEsf),
-        oiCil:       payload.oiCil === "" ? null : Number(payload.oiCil),
-        oiEje:       payload.oiEje === "" ? null : Number(payload.oiEje),
+        odEsf:       payload.odEsf === "" ? null : (payload.odEsf != null ? Number(payload.odEsf) : null),
+        odCil:       payload.odCil === "" ? null : (payload.odCil != null ? Number(payload.odCil) : null),
+        odEje:       payload.odEje === "" ? null : (payload.odEje != null ? Number(payload.odEje) : null),
+        oiEsf:       payload.oiEsf === "" ? null : (payload.oiEsf != null ? Number(payload.oiEsf) : null),
+        oiCil:       payload.oiCil === "" ? null : (payload.oiCil != null ? Number(payload.oiCil) : null),
+        oiEje:       payload.oiEje === "" ? null : (payload.oiEje != null ? Number(payload.oiEje) : null),
         tratamiento: payload.tratamiento ?? null,
         formato:     payload.formato     ?? null,
-        dip:         payload.dip === ""  ? null : Number(payload.dip),
+        dip:         payload.dip === ""  ? null : (payload.dip != null ? Number(payload.dip) : null),
+        montaje:     payload.montaje     ?? null,
+        doctor:      payload.doctor      ?? null,
+        patologia:   payload.patologia   ?? null,
+        obs:         payload.obs         ?? null,
+        fotos: fotos.length > 0 ? {
+          create: fotos.map((f) => ({
+            foto:          f.foto,
+            observaciones: f.observaciones || "",
+          })),
+        } : undefined,
       },
+      include: { fotos: true },
     });
   });
 
   safeHandle("patients:evoluciones:update", async (_evt, payload) => {
     if (!payload?.id) throw new Error("Falta id");
+    const fotos = Array.isArray(payload.fotos) ? payload.fotos : [];
     return prisma.evolucionRefraccion.update({
       where: { id: Number(payload.id) },
       data: {
         fecha:       payload.fecha ? new Date(payload.fecha + "T00:00:00") : undefined,
         distancia:   payload.distancia   ?? null,
-        odEsf:       payload.odEsf === "" ? null : Number(payload.odEsf),
-        odCil:       payload.odCil === "" ? null : Number(payload.odCil),
-        odEje:       payload.odEje === "" ? null : Number(payload.odEje),
-        oiEsf:       payload.oiEsf === "" ? null : Number(payload.oiEsf),
-        oiCil:       payload.oiCil === "" ? null : Number(payload.oiCil),
-        oiEje:       payload.oiEje === "" ? null : Number(payload.oiEje),
+        odEsf:       payload.odEsf === "" ? null : (payload.odEsf != null ? Number(payload.odEsf) : null),
+        odCil:       payload.odCil === "" ? null : (payload.odCil != null ? Number(payload.odCil) : null),
+        odEje:       payload.odEje === "" ? null : (payload.odEje != null ? Number(payload.odEje) : null),
+        oiEsf:       payload.oiEsf === "" ? null : (payload.oiEsf != null ? Number(payload.oiEsf) : null),
+        oiCil:       payload.oiCil === "" ? null : (payload.oiCil != null ? Number(payload.oiCil) : null),
+        oiEje:       payload.oiEje === "" ? null : (payload.oiEje != null ? Number(payload.oiEje) : null),
         tratamiento: payload.tratamiento ?? null,
         formato:     payload.formato     ?? null,
-        dip:         payload.dip === ""  ? null : Number(payload.dip),
+        dip:         payload.dip === ""  ? null : (payload.dip != null ? Number(payload.dip) : null),
+        montaje:     payload.montaje     ?? null,
+        doctor:      payload.doctor      ?? null,
+        patologia:   payload.patologia   ?? null,
+        obs:         payload.obs         ?? null,
+        fotos: fotos.length > 0 ? {
+          deleteMany: {},
+          create: fotos.map((f) => ({
+            foto:          f.foto,
+            observaciones: f.observaciones || "",
+          })),
+        } : undefined,
       },
+      include: { fotos: true },
     });
   });
 
