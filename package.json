@@ -1,6 +1,6 @@
 {
   "name": "opticapp",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Sistema de gestión para ópticas",
   "main": "main/main.js",
   "scripts": {
