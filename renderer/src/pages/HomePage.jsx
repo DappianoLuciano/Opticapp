@@ -80,6 +80,10 @@ export default function HomePage({ onNavigate }) {
   const [gastosIdx,        setGastosIdx]        = useState(0);
   const [lentesIdx,        setLentesIdx]        = useState(0);
 
+  useEffect(() => { setUpcomingIdx(0); }, [upcoming]);
+  useEffect(() => { setLentesIdx(0); }, [pendingPickup]);
+  useEffect(() => { setGastosIdx(0); }, [gastosProx]);
+
   const [deliverModalOpen, setDeliverModalOpen] = useState(false);
   const [deliverTarget,    setDeliverTarget]    = useState(null);
   const [pickupModalOpen,  setPickupModalOpen]  = useState(false);
@@ -198,9 +202,6 @@ export default function HomePage({ onNavigate }) {
 
   const todayISO = toISODate(today);
 
-  const entregasHoy = useMemo(() =>
-    upcoming.filter((r) => r.entregaFecha && toISODate(new Date(r.entregaFecha)) === todayISO),
-  [upcoming, todayISO]);
 
   async function confirmDeliver() {
     if (!deliverTarget?.id) return;
@@ -361,7 +362,7 @@ export default function HomePage({ onNavigate }) {
       <div style={{ flex: 1, display: "flex", gap: 14, alignItems: "stretch", overflow: "hidden", minHeight: 0 }}>
 
         {/* Columna izquierda: calendario — ancho fijo */}
-        <section className="card" style={{ width: 320, minWidth: 300, maxWidth: 340, flexShrink: 0, overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <section className="card" style={{ width: 430, minWidth: 410, maxWidth: 450, flexShrink: 0, alignSelf: "flex-start", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-start", paddingTop: 8, paddingBottom: 8 }}>
           <div className="rowBetween" style={{ marginBottom: 10 }}>
             <div style={{ fontWeight: 900, fontSize: 16 }}>{monthLabel}</div>
             <div style={{ display: "flex", gap: 10 }}>
@@ -370,7 +371,7 @@ export default function HomePage({ onNavigate }) {
               <button className="btn" type="button" onClick={() => setYm((p) => addMonths(p.year, p.monthIndex, +1))}>▶</button>
             </div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 36px)", gap: 4, justifyContent: "center" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 42px)", gap: 6, justifyContent: "center" }}>
             {["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"].map((d) => (
               <div key={d} style={{ fontSize: 11, fontWeight: 900, opacity: 0.6, textAlign: "center", padding: "4px 0" }}>{d}</div>
             ))}
@@ -382,7 +383,7 @@ export default function HomePage({ onNavigate }) {
               const vcount  = vencimientoCountByDay.get(iso) || 0;
               return (
                 <button key={iso} type="button" onClick={() => setSelectedDate(iso)} style={{
-                  width: 36, height: 36, display: "flex", alignItems: "center",
+                  width: 42, height: 42, display: "flex", alignItems: "center",
                   justifyContent: "center", position: "relative", fontWeight: 900, fontSize: 13,
                   borderRadius: 10,
                   border: isSel ? "1px solid rgba(85,201,154,0.55)" : isToday ? "1px solid rgba(85,201,154,0.30)" : "1px solid transparent",
@@ -571,7 +572,7 @@ export default function HomePage({ onNavigate }) {
               const esHoy = iso === todayISO;
               return (
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  <button type="button" className="btn" onClick={() => setSelectedDate(iso)} style={{ textAlign: "left", width: "100%" }}>
+                  <button type="button" className="btn" disabled={iso === "-"} onClick={() => iso !== "-" && setSelectedDate(iso)} style={{ textAlign: "left", width: "100%" }}>
                     <div style={{ fontWeight: 900 }}>
                       {esHoy ? <span style={{ color: "var(--danger)" }}>Hoy</span> : iso}
                       {" · "}{r.paciente?.nombre || "Paciente"}{r.paciente?.dni ? ` (DNI ${r.paciente.dni})` : ""}
