@@ -154,6 +154,13 @@ export default function BuscarPacientesPage() {
   const [evoOiEsf, setEvoOiEsf] = useState("");
   const [evoOiCil, setEvoOiCil] = useState("");
   const [evoOiEje, setEvoOiEje] = useState("");
+  const [evoDistancia2, setEvoDistancia2] = useState("");
+  const [evoOd2Esf, setEvoOd2Esf] = useState("");
+  const [evoOd2Cil, setEvoOd2Cil] = useState("");
+  const [evoOd2Eje, setEvoOd2Eje] = useState("");
+  const [evoOi2Esf, setEvoOi2Esf] = useState("");
+  const [evoOi2Cil, setEvoOi2Cil] = useState("");
+  const [evoOi2Eje, setEvoOi2Eje] = useState("");
   const [evoTratamiento, setEvoTratamiento] = useState("");
   const [evoFormato, setEvoFormato] = useState("");
   const [evoDip, setEvoDip] = useState("");
@@ -572,6 +579,8 @@ export default function BuscarPacientesPage() {
     setEvoFechaReceta(""); setEvoDoctor(""); setEvoPatologias([]); setEvoPatologiaQuery(""); setEvoPatologiaOpen(false); setEvoObs("");
     setEvoTabModo("manual");
     setEvoFotosCapturadas([]); setEvoCurrentFoto(null); setEvoCurrentObs(""); setEvoErrorCam("");
+    setEvoDistancia2(""); setEvoOd2Esf(""); setEvoOd2Cil(""); setEvoOd2Eje("");
+    setEvoOi2Esf(""); setEvoOi2Cil(""); setEvoOi2Eje("");
   }
 
   function openEvoModal() {
@@ -586,6 +595,9 @@ export default function BuscarPacientesPage() {
       setEvoOiEsf(last.oiEsf ?? "");
       setEvoOiCil(last.oiCil ?? "");
       setEvoOiEje(last.oiEje ?? "");
+      setEvoDistancia2(last.distancia2 ?? "");
+      setEvoOd2Esf(last.od2Esf ?? ""); setEvoOd2Cil(last.od2Cil ?? ""); setEvoOd2Eje(last.od2Eje ?? "");
+      setEvoOi2Esf(last.oi2Esf ?? ""); setEvoOi2Cil(last.oi2Cil ?? ""); setEvoOi2Eje(last.oi2Eje ?? "");
       setEvoTratamiento(last.tratamiento ?? "");
       setEvoVidrioId(""); setEvoVidrioQuery(last.tratamiento ?? "");
       setEvoFormato(last.formato ?? "");
@@ -616,6 +628,9 @@ export default function BuscarPacientesPage() {
     setEvoDistancia(row.distancia ?? "");
     setEvoOdEsf(row.odEsf ?? ""); setEvoOdCil(row.odCil ?? ""); setEvoOdEje(row.odEje ?? "");
     setEvoOiEsf(row.oiEsf ?? ""); setEvoOiCil(row.oiCil ?? ""); setEvoOiEje(row.oiEje ?? "");
+    setEvoDistancia2(row.distancia2 ?? "");
+    setEvoOd2Esf(row.od2Esf ?? ""); setEvoOd2Cil(row.od2Cil ?? ""); setEvoOd2Eje(row.od2Eje ?? "");
+    setEvoOi2Esf(row.oi2Esf ?? ""); setEvoOi2Cil(row.oi2Cil ?? ""); setEvoOi2Eje(row.oi2Eje ?? "");
     setEvoTratamiento(row.tratamiento ?? ""); setEvoVidrioId(""); setEvoVidrioQuery(row.tratamiento ?? "");
     setEvoFormato(row.formato ?? ""); setEvoDip(row.dip ?? ""); setEvoMontaje(row.montaje ?? "");
     setEvoFechaReceta(row.fechaReceta ?? ""); setEvoDoctor(row.doctor ?? "");
@@ -717,6 +732,13 @@ export default function BuscarPacientesPage() {
         pacienteId: selectedId, fecha: evoFecha, distancia: evoDistancia,
         odEsf: String(evoOdEsf).replace(",", "."), odCil: String(evoOdCil).replace(",", "."), odEje: String(evoOdEje).trim(),
         oiEsf: String(evoOiEsf).replace(",", "."), oiCil: String(evoOiCil).replace(",", "."), oiEje: String(evoOiEje).trim(),
+        distancia2: (evoFormato === "BIFOCAL" || evoFormato === "MULTIFOCAL") ? evoDistancia2 : null,
+        od2Esf: (evoFormato === "BIFOCAL" || evoFormato === "MULTIFOCAL") ? String(evoOd2Esf).replace(",", ".") : null,
+        od2Cil: (evoFormato === "BIFOCAL" || evoFormato === "MULTIFOCAL") ? String(evoOd2Cil).replace(",", ".") : null,
+        od2Eje: (evoFormato === "BIFOCAL" || evoFormato === "MULTIFOCAL") ? String(evoOd2Eje).trim() : null,
+        oi2Esf: (evoFormato === "BIFOCAL" || evoFormato === "MULTIFOCAL") ? String(evoOi2Esf).replace(",", ".") : null,
+        oi2Cil: (evoFormato === "BIFOCAL" || evoFormato === "MULTIFOCAL") ? String(evoOi2Cil).replace(",", ".") : null,
+        oi2Eje: (evoFormato === "BIFOCAL" || evoFormato === "MULTIFOCAL") ? String(evoOi2Eje).trim() : null,
         tratamiento: evoTratamiento || null, formato: evoFormato || null, dip: String(evoDip).replace(",", ".") || null,
         montaje: evoMontaje || null,
         doctor: evoDoctor || null, patologia: evoPatologias.join(", ") || null, obs: evoObs || null,
@@ -1090,44 +1112,73 @@ export default function BuscarPacientesPage() {
                 </div>
               )}
 
-              <div className="grid2">
-                <label className="field">
-                  <span>Fecha *</span>
-                  <input
-                    type="date" max={todayISO}
-                    className={evoErrors.fecha ? "inputError" : ""}
-                    value={evoFecha}
-                    onChange={(e) => { setEvoFecha(e.target.value); clearEvoErr("fecha"); }}
-                  />
-                  <div className="fieldErrorSlot">{evoErrors.fecha || "\u00A0"}</div>
-                </label>
+              <label className="field">
+                <span>Fecha *</span>
+                <input
+                  type="date" max={todayISO}
+                  className={evoErrors.fecha ? "inputError" : ""}
+                  value={evoFecha}
+                  onChange={(e) => { setEvoFecha(e.target.value); clearEvoErr("fecha"); }}
+                />
+                <div className="fieldErrorSlot">{evoErrors.fecha || "\u00A0"}</div>
+              </label>
 
+              {/* ── FORMATO (solo carga manual) ── */}
+              {evoTabModo === "manual" && (
                 <label className="field">
-                  <span>Uso {evoTabModo === "manual" ? "*" : "(opcional)"}</span>
+                  <span>Formato</span>
                   <ComboSelect
-                    className={evoErrors.distancia ? "inputError" : ""}
-                    value={evoDistancia}
+                    value={evoFormato}
                     onChange={(v) => {
-                      setEvoDistancia(v);
-                      clearEvoErr("distancia");
-                      if (v === "SOL") {
-                        selectEvoVidrioNinguno();
-                        setEvoFormato("NINGUNO");
-                        setEvoMontaje("NINGUNO");
+                      setEvoFormato(v);
+                      if (v !== "BIFOCAL" && v !== "MULTIFOCAL") {
+                        setEvoDistancia2(""); setEvoOd2Esf(""); setEvoOd2Cil(""); setEvoOd2Eje("");
+                        setEvoOi2Esf(""); setEvoOi2Cil(""); setEvoOi2Eje("");
                       }
                     }}
                     options={[
                       { value: "", label: "Seleccionar..." },
-                      { value: "LEJOS", label: "Lejos" },
-                      { value: "CERCA", label: "Cerca" },
-                      { value: "INTERMEDIA", label: "Intermedia" },
-                      { value: "LENTE_CONTACTO", label: "Lente de contacto" },
-                      { value: "SOL", label: "Sol" },
+                      { value: "NINGUNO", label: "Ninguno" },
+                      { value: "MONOFOCAL", label: "Monofocal" },
+                      { value: "CONTACTO", label: "Lentes de contacto" },
+                      { value: "BIFOCAL", label: "Bifocal" },
+                      { value: "MULTIFOCAL", label: "Multifocal" },
                     ]}
                   />
-                  <div className="fieldErrorSlot">{evoErrors.distancia || "\u00A0"}</div>
+                  <div className="fieldErrorSlot">{"\u00A0"}</div>
                 </label>
-              </div>
+              )}
+
+              {evoTabModo === "manual" && (evoFormato === "BIFOCAL" || evoFormato === "MULTIFOCAL") && (
+                <p style={{ margin: "0 0 2px", fontWeight: 700, fontSize: 13, color: "var(--muted)" }}>Primer uso</p>
+              )}
+
+              {/* ── USO ── */}
+              <label className="field">
+                <span>Uso {evoTabModo === "manual" ? "*" : "(opcional)"}</span>
+                <ComboSelect
+                  className={evoErrors.distancia ? "inputError" : ""}
+                  value={evoDistancia}
+                  onChange={(v) => {
+                    setEvoDistancia(v);
+                    clearEvoErr("distancia");
+                    if (v === "SOL") {
+                      selectEvoVidrioNinguno();
+                      setEvoFormato("NINGUNO");
+                      setEvoMontaje("NINGUNO");
+                    }
+                  }}
+                  options={[
+                    { value: "", label: "Seleccionar..." },
+                    { value: "LEJOS", label: "Lejos" },
+                    { value: "CERCA", label: "Cerca" },
+                    { value: "INTERMEDIA", label: "Intermedia" },
+                    { value: "LENTE_CONTACTO", label: "Lente de contacto" },
+                    { value: "SOL", label: "Sol" },
+                  ].filter((o) => !o.value || o.value !== evoDistancia2)}
+                />
+                <div className="fieldErrorSlot">{evoErrors.distancia || "\u00A0"}</div>
+              </label>
 
               {/* ── GRADUACIÓN (solo carga manual) ── */}
               {evoTabModo === "manual" && <div className="grid2" style={{ alignItems: "stretch" }}>
@@ -1206,6 +1257,89 @@ export default function BuscarPacientesPage() {
                 </div>
               </div>}
 
+              {/* ── SEGUNDO USO (solo carga manual + bifocal/multifocal) ── */}
+              {evoTabModo === "manual" && (evoFormato === "BIFOCAL" || evoFormato === "MULTIFOCAL") && (<>
+                <div style={{ borderTop: "1px solid var(--border)", paddingTop: 10, marginTop: 2 }}>
+                  <p style={{ margin: "0 0 8px", fontWeight: 700, fontSize: 13, color: "var(--muted)" }}>Segundo uso</p>
+                </div>
+                <label className="field">
+                  <span>Uso 2</span>
+                  <ComboSelect
+                    value={evoDistancia2}
+                    onChange={(v) => setEvoDistancia2(v)}
+                    options={[
+                      { value: "", label: "Seleccionar..." },
+                      { value: "LEJOS", label: "Lejos" },
+                      { value: "CERCA", label: "Cerca" },
+                      { value: "INTERMEDIA", label: "Intermedia" },
+                      { value: "LENTE_CONTACTO", label: "Lente de contacto" },
+                    ].filter((o) => !o.value || o.value !== evoDistancia)}
+                  />
+                  <div className="fieldErrorSlot">{"\u00A0"}</div>
+                </label>
+                <div className="grid2" style={{ alignItems: "stretch" }}>
+                  <div className="card" style={{ padding: 12 }}>
+                    <h4 style={{ margin: "0 0 10px" }}>Ojo derecho 2 (OD)</h4>
+                    <div className="grid2" style={{ gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                      <label className="field">
+                        <span>Esférico</span>
+                        <div className="stepper">
+                          <button type="button" className="stepBtn" onClick={() => setEvoOd2Esf(stepQuarter(evoOd2Esf, -0.25))}>-</button>
+                          <input value={evoOd2Esf} onChange={(e) => setEvoOd2Esf(e.target.value)}
+                            onBlur={() => { const s = String(evoOd2Esf ?? "").trim(); if (!s) return; const n = Number(s.replace(",",".")); if (!Number.isNaN(n)) setEvoOd2Esf(normalizeQuarter(evoOd2Esf)); }}
+                            placeholder="Ej: -1.25" inputMode="decimal" />
+                          <button type="button" className="stepBtn" onClick={() => setEvoOd2Esf(stepQuarter(evoOd2Esf, +0.25))}>+</button>
+                        </div>
+                      </label>
+                      <label className="field">
+                        <span>Cilíndrico</span>
+                        <div className="stepper">
+                          <button type="button" className="stepBtn" onClick={() => setEvoOd2Cil(stepQuarter(evoOd2Cil, -0.25))}>-</button>
+                          <input value={evoOd2Cil} onChange={(e) => setEvoOd2Cil(e.target.value)}
+                            onBlur={() => { const s = String(evoOd2Cil ?? "").trim(); if (!s) return; const n = Number(s.replace(",",".")); if (!Number.isNaN(n)) setEvoOd2Cil(normalizeQuarter(evoOd2Cil)); }}
+                            placeholder="Ej: -0.50" inputMode="decimal" />
+                          <button type="button" className="stepBtn" onClick={() => setEvoOd2Cil(stepQuarter(evoOd2Cil, +0.25))}>+</button>
+                        </div>
+                      </label>
+                    </div>
+                    <label className="field">
+                      <span>Eje (-360 a 360)</span>
+                      <input value={evoOd2Eje} onChange={(e) => setEvoOd2Eje(e.target.value)} placeholder="Ej: 90" inputMode="numeric" />
+                    </label>
+                  </div>
+
+                  <div className="card" style={{ padding: 12 }}>
+                    <h4 style={{ margin: "0 0 10px" }}>Ojo izquierdo 2 (OI)</h4>
+                    <div className="grid2" style={{ gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                      <label className="field">
+                        <span>Esférico</span>
+                        <div className="stepper">
+                          <button type="button" className="stepBtn" onClick={() => setEvoOi2Esf(stepQuarter(evoOi2Esf, -0.25))}>-</button>
+                          <input value={evoOi2Esf} onChange={(e) => setEvoOi2Esf(e.target.value)}
+                            onBlur={() => { const s = String(evoOi2Esf ?? "").trim(); if (!s) return; const n = Number(s.replace(",",".")); if (!Number.isNaN(n)) setEvoOi2Esf(normalizeQuarter(evoOi2Esf)); }}
+                            placeholder="Ej: -1.00" inputMode="decimal" />
+                          <button type="button" className="stepBtn" onClick={() => setEvoOi2Esf(stepQuarter(evoOi2Esf, +0.25))}>+</button>
+                        </div>
+                      </label>
+                      <label className="field">
+                        <span>Cilíndrico</span>
+                        <div className="stepper">
+                          <button type="button" className="stepBtn" onClick={() => setEvoOi2Cil(stepQuarter(evoOi2Cil, -0.25))}>-</button>
+                          <input value={evoOi2Cil} onChange={(e) => setEvoOi2Cil(e.target.value)}
+                            onBlur={() => { const s = String(evoOi2Cil ?? "").trim(); if (!s) return; const n = Number(s.replace(",",".")); if (!Number.isNaN(n)) setEvoOi2Cil(normalizeQuarter(evoOi2Cil)); }}
+                            placeholder="Ej: -0.75" inputMode="decimal" />
+                          <button type="button" className="stepBtn" onClick={() => setEvoOi2Cil(stepQuarter(evoOi2Cil, +0.25))}>+</button>
+                        </div>
+                      </label>
+                    </div>
+                    <label className="field">
+                      <span>Eje (-360 a 360)</span>
+                      <input value={evoOi2Eje} onChange={(e) => setEvoOi2Eje(e.target.value)} placeholder="Ej: 80" inputMode="numeric" />
+                    </label>
+                  </div>
+                </div>
+              </>)}
+
               {/* ── LENTE + MÉDICO ── */}
               <div className="grid2" style={{ alignItems: "stretch" }}>
                 <div className="card" style={{ padding: 12 }}>
@@ -1275,32 +1409,13 @@ export default function BuscarPacientesPage() {
                     </label>
                   </div>
 
-                  <div className="grid2">
-                    <label className="field">
-                      <span>Formato</span>
-                      <ComboSelect
-                        value={evoFormato}
-                        onChange={(v) => setEvoFormato(v)}
-                        options={[
-                          { value: "", label: "Seleccionar..." },
-                          { value: "NINGUNO", label: "Ninguno" },
-                          { value: "MONOFOCAL", label: "Monofocal" },
-                          { value: "CONTACTO", label: "Lentes de contacto" },
-                          { value: "BIFOCAL", label: "Bifocal" },
-                          { value: "MULTIFOCAL", label: "Multifocal" },
-                        ]}
-                      />
-                      <div className="fieldErrorSlot">{"\u00A0"}</div>
-                    </label>
-
-                    <label className="field">
-                      <span>DIP (opcional)</span>
-                      <input className={evoErrors.dip ? "inputError" : ""} value={evoDip}
-                        onChange={(e) => { setEvoDip(e.target.value); clearEvoErr("dip"); }}
-                        placeholder="Ej: 62" inputMode="decimal" />
-                      <div className="fieldErrorSlot">{evoErrors.dip || "\u00A0"}</div>
-                    </label>
-                  </div>
+                  <label className="field">
+                    <span>DIP (opcional)</span>
+                    <input className={evoErrors.dip ? "inputError" : ""} value={evoDip}
+                      onChange={(e) => { setEvoDip(e.target.value); clearEvoErr("dip"); }}
+                      placeholder="Ej: 62" inputMode="decimal" />
+                    <div className="fieldErrorSlot">{evoErrors.dip || "\u00A0"}</div>
+                  </label>
                 </div>
 
                 <div className="card" style={{ padding: 12 }}>

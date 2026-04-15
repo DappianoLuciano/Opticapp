@@ -153,6 +153,14 @@ model EvolucionRefraccion {
   oiCil Float?
   oiEje Int?
 
+  distancia2 String?
+  od2Esf     Float?
+  od2Cil     Float?
+  od2Eje     Int?
+  oi2Esf     Float?
+  oi2Cil     Float?
+  oi2Eje     Int?
+
   tratamiento String?
   formato     String?
   dip         Float?

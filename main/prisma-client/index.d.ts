@@ -9594,6 +9594,13 @@ export namespace Prisma {
       oiEsf: number | null
       oiCil: number | null
       oiEje: number | null
+      distancia2: string | null
+      od2Esf: number | null
+      od2Cil: number | null
+      od2Eje: number | null
+      oi2Esf: number | null
+      oi2Cil: number | null
+      oi2Eje: number | null
       tratamiento: string | null
       formato: string | null
       dip: number | null
